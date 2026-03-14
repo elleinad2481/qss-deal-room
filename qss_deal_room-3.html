@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QSS Deal Room — Student Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1117;
+    --surface: #161b27;
+    --surface2: #1e2535;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #e8e6df;
+    --muted: #8a8880;
+    --accent: #e8b45a;
+    --accent2: #c49440;
+    --teal: #3ecfb0;
+    --purple: #9b87f5;
+    --coral: #f07060;
+    --blue: #5ba3f5;
+    --green: #5ec47a;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  .sidebar-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .sidebar-sub {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .nav-section {
+    padding: 16px 0 8px;
+  }
+
+  .nav-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 24px 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 24px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.18s;
+    border-left: 2px solid transparent;
+    user-select: none;
+  }
+
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+
+  .nav-item.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: rgba(232,180,90,0.06);
+    font-weight: 500;
+  }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+
+  .nav-item.active .nav-dot { opacity: 1; }
+
+  .client-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── Main Content ── */
+  #main {
+    margin-left: 260px;
+    flex: 1;
+    min-height: 100vh;
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── Hero Banner ── */
+  .hero {
+    background: linear-gradient(135deg, #161b27 0%, #1a1f2e 50%, #12161f 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 56px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(232,180,90,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(232,180,90,0.1);
+    border: 1px solid rgba(232,180,90,0.2);
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: var(--text);
+    max-width: 600px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-desc {
+    margin-top: 16px;
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 28px;
+    margin-top: 32px;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .hero-stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Content area ── */
+  .content {
+    padding: 48px 56px;
+    max-width: 900px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  /* ── Phase cards ── */
+  .phase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .phase-card:hover { border-color: var(--border2); }
+
+  .phase-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .phase-card.teal::before { background: var(--teal); }
+  .phase-card.purple::before { background: var(--purple); }
+  .phase-card.amber::before { background: var(--accent); }
+  .phase-card.coral::before { background: var(--coral); }
+
+  .phase-week {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .phase-card.teal .phase-week { color: var(--teal); }
+  .phase-card.purple .phase-week { color: var(--purple); }
+  .phase-card.amber .phase-week { color: var(--accent); }
+  .phase-card.coral .phase-week { color: var(--coral); }
+
+  .phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .phase-body {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .phase-items {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .phase-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .phase-item::before {
+    content: '→';
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 11px;
+  }
+
+  .phase-card.teal .phase-item::before { color: var(--teal); }
+  .phase-card.purple .phase-item::before { color: var(--purple); }
+  .phase-card.amber .phase-item::before { color: var(--accent); }
+  .phase-card.coral .phase-item::before { color: var(--coral); }
+
+  /* ── Deliverables ── */
+  .deliverable-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 24px;
+    transition: border-color 0.2s;
+  }
+
+  .deliverable-card:hover { border-color: var(--border2); }
+
+  .deliverable-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--accent);
+    opacity: 0.3;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 40px;
+  }
+
+  .deliverable-body {}
+
+  .deliverable-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .deliverable-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  .deliverable-reqs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .req-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius-sm);
+    border-left: 2px solid var(--accent);
+  }
+
+  /* ── Rubric table ── */
+  .rubric-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .rubric-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .rubric-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.6;
+    vertical-align: top;
+  }
+
+  .rubric-table tr:last-child td { border-bottom: none; }
+  .rubric-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .rubric-area {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .rubric-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .rubric-bar {
+    height: 4px;
+    border-radius: 2px;
+    margin-top: 6px;
+    background: var(--border);
+    overflow: hidden;
+  }
+
+  .rubric-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  /* ── Client cards (grid) ── */
+  .client-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .client-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .client-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+  }
+
+  .client-card::after {
+    content: '→';
+    position: absolute;
+    bottom: 20px; right: 20px;
+    font-size: 14px;
+    color: var(--muted);
+    transition: transform 0.2s, color 0.2s;
+  }
+
+  .client-card:hover::after {
+    transform: translateX(3px);
+    color: var(--text);
+  }
+
+  .client-card-accent {
+    width: 32px; height: 3px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .client-card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .client-card-sector {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .client-card-teaser {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .client-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .tag {
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ── Client detail page ── */
+  .client-hero {
+    padding: 40px 56px 36px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .client-hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+    user-select: none;
+  }
+
+  .back-btn:hover { color: var(--text); }
+
+  .client-name-lg {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .client-sector-lg {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .client-tagline {
+    font-size: 16px;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    max-width: 540px;
+    line-height: 1.5;
+  }
+
+  .client-content {
+    padding: 40px 56px;
+    max-width: 860px;
+  }
+
+  .client-section {
+    margin-bottom: 36px;
+  }
+
+  .client-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .client-section p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .client-section p:last-child { margin-bottom: 0; }
+
+  .fact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .fact-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+  }
+
+  .fact-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .fact-label {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .signal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .signal-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    align-items: flex-start;
+  }
+
+  .signal-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .signal-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .signal-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .callout {
+    background: rgba(232,180,90,0.06);
+    border: 1px solid rgba(232,180,90,0.18);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-top: 24px;
+  }
+
+  .callout-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .callout p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .question-item {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    padding: 12px 16px;
+    border-left: 2px solid var(--border2);
+    background: rgba(255,255,255,0.02);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  /* ── Slide req section ── */
+  .slide-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .slide-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+
+  .slide-num {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .slide-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .slide-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .slide-bullets {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .slide-bullet {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .slide-bullet::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--accent);
+  }
+
+  /* ── In-class sessions ── */
+  .session-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .session-badge {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .session-content {}
+
+  .session-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .session-focus {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .session-goals {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .session-goal {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+
+  .session-goal::before {
+    content: '✓';
+    color: var(--green);
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .page.active { animation: fadeIn 0.25s ease; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    #sidebar { display: none; }
+    #main { margin-left: 0; }
+    .hero, .content, .client-hero, .client-content { padding: 28px 20px; }
+    .phase-grid, .client-grid { grid-template-columns: 1fr; }
+    .fact-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">QSS<br>Deal Room</div>
+    <div class="sidebar-sub">Student Portal · Team Project</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Assignment</div>
+    <div class="nav-item active" onclick="showPage('overview')">
+      <span class="nav-dot"></span> Overview
+    </div>
+    <div class="nav-item" onclick="showPage('phases')">
+      <span class="nav-dot"></span> The Four Phases
+    </div>
+    <div class="nav-item" onclick="showPage('deliverables')">
+      <span class="nav-dot"></span> Deliverables
+    </div>
+    <div class="nav-item" onclick="showPage('glossary')">
+      <span class="nav-dot"></span> Business Glossary
+    </div>
+    <div class="nav-item" onclick="showPage('example')">
+      <span class="nav-dot"></span> See an Example
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Client Options</div>
+    <div class="nav-item" onclick="showClient('eden')">
+      <span class="client-dot" style="background:#5ec47a"></span> Eden Home Solutions
+    </div>
+    <div class="nav-item" onclick="showClient('harborview')">
+      <span class="client-dot" style="background:#5ba3f5"></span> Harborview Health Network
+    </div>
+    <div class="nav-item" onclick="showClient('greenloop')">
+      <span class="client-dot" style="background:#3ecfb0"></span> GreenLoop Apparel
+    </div>
+    <div class="nav-item" onclick="showClient('apex')">
+      <span class="client-dot" style="background:#f07060"></span> Apex Performance Sports Group
+    </div>
+    <div class="nav-item" onclick="showClient('northshore')">
+      <span class="client-dot" style="background:#9b87f5"></span> Northshore Property Group
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    Select a client to read their full backstory, then use the four phases to build your case.
+  </div>
+</nav>
+
+<!-- ═══════════════════════ MAIN ═══════════════════════ -->
+<main id="main">
+
+  <!-- ── OVERVIEW PAGE ── -->
+  <div class="page active" id="page-overview">
+    <div class="hero">
+      <div class="hero-tag">Team Project · Operations · Finance · Data · Strategy</div>
+      <h1>The QSS <em>Deal Room</em></h1>
+      <p class="hero-desc">At QSS, a client opportunity isn't evaluated with a research summary — it's evaluated with a full case. Operations logic. A prototype. A data plan. A financial argument. Your team builds all of it, drawing on everything you've covered in class.</p>
+      <div class="hero-meta">
+        <div class="hero-stat">
+          <span class="hero-stat-value">4</span>
+          <span class="hero-stat-label">Phases of analysis</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">3</span>
+          <span class="hero-stat-label">Deliverables</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">5</span>
+          <span class="hero-stat-label">Client options</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="section-title">The Central Question</div>
+      <p class="section-sub">Everything your team produces — every slide, every number, every recommendation — should help QSS leadership answer one question:</p>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;margin-bottom:40px;border-left:3px solid var(--accent);">
+        <p style="font-family:'Playfair Display',serif;font-size:20px;font-style:italic;color:var(--text);line-height:1.5;margin:0;">"Is this client a smart engagement for QSS — operationally, analytically, and financially — and what evidence supports that judgment?"</p>
+      </div>
+
+      <div class="section-title">How This Works</div>
+      <p class="section-sub">Your team picks one client from five options. Using the concepts and skills you've already covered in class, you build a complete feasibility case — four phases, three deliverables, one recommendation.</p>
+
+      <div class="phase-grid">
+        <div class="phase-card teal" onclick="showPage('phases')">
+          <div class="phase-week">Phase 1 · Operations & Costs</div>
+          <div class="phase-title">Operational Logic</div>
+          <div class="phase-body">Map the workstreams, resources, and cost drivers. Name where execution could fail — and how you'd prevent it.</div>
+        </div>
+        <div class="phase-card purple" onclick="showPage('phases')">
+          <div class="phase-week">Phase 2 · Prototyping & Feedback</div>
+          <div class="phase-title">Prototype & Feedback</div>
+          <div class="phase-body">QSS doesn't pitch ideas without testing them. Show what you'd actually deliver — as a draft — and how you'd improve it.</div>
+        </div>
+        <div class="phase-card amber" onclick="showPage('phases')">
+          <div class="phase-week">Phase 3 · Data & Validation</div>
+          <div class="phase-title">Data & Validation</div>
+          <div class="phase-body">Data beats opinions. Show the data you'd need, how you'd get it, and — critically — what decisions it would enable.</div>
+        </div>
+        <div class="phase-card coral" onclick="showPage('phases')">
+          <div class="phase-week">Phase 4 · Financial Literacy</div>
+          <div class="phase-title">Financial Reasoning</div>
+          <div class="phase-body">Build the financial case. State your assumptions. Show best, base, and worst cases. Make a recommendation that can survive a hard question.</div>
+        </div>
+      </div>
+
+      <div class="section-title">Choose Your Client</div>
+      <p class="section-sub">Each client has a full backstory — company background, financial situation, challenges, and the specific question they're bringing to QSS. Click any client to read their profile before your team decides.</p>
+
+      <div class="client-grid">
+        <div class="client-card" onclick="showClient('eden')">
+          <div class="client-card-accent" style="background:#5ec47a"></div>
+          <div class="client-card-name">Eden Home Solutions</div>
+          <div class="client-card-sector" style="color:#5ec47a">Smart Home · Consumer Tech</div>
+          <div class="client-card-teaser">A fast-growing smart home startup hitting a wall as it tries to move from urban apartments to suburban homeowners. The product works. The expansion doesn't — yet.</div>
+          <div class="client-card-tags"><span class="tag">Go-to-market</span><span class="tag">Operations</span><span class="tag">Pricing</span></div>
+        </div>
+        <div class="client-card" onclick="showClient('harborview')">
+          <div class="client-card-accent" style="background:#5ba3f5"></div>
+          <div class="client-card-name">Harborview Health Network</div>
+          <div class="client-card-sector" style="color:#5ba3f5">Healthcare · Regional Hospital</div>
+          <div class="client-card-teaser">A regional hospital network losing patients — and revenue — to preventable readmissions and poor post-discharge follow-through. The data exists. Nobody is using it.</div>
+          <div class="client-card-tags"><span class="tag">Analytics</span><span class="tag">Patient ops</span><span class="tag">Workflow</span></div>
+        </div>
+        <div class="client-card" onclick="showClient('greenloop')">
+          <div class="client-card-accent" style="background:#3ecfb0"></div>
+          <div class="client-card-name">GreenLoop Apparel</div>
+          <div class="client-card-sector" style="color:#3ecfb0">Sustainable Fashion · B2B/DTC</div>
+          <div class="client-card-teaser">A certified sustainable fashion brand with strong values and a fragile supply chain. They're growing the B2B wholesale channel but can't predict or control their own inventory.</div>
+          <div class="client-card-tags"><span class="tag">Supply chain</span><span class="tag">B2B growth</span><span class="tag">Forecasting</span></div>
+        </div>
+        <div class="client-card" onclick="showClient('apex')">
+          <div class="client-card-accent" style="background:#f07060"></div>
+          <div class="client-card-name">Apex Performance Sports Group</div>
+          <div class="client-card-sector" style="color:#f07060">Sports Performance · Fitness</div>
+          <div class="client-card-teaser">A high-end training facility chain with serious brand equity and a serious attrition problem. Members sign up hard. Members leave quietly. No one knows why.</div>
+          <div class="client-card-tags"><span class="tag">Retention</span><span class="tag">Site selection</span><span class="tag">Membership</span></div>
+        </div>
+        <div class="client-card" onclick="showClient('northshore')" style="grid-column:1/-1;max-width:calc(50% - 8px);">
+          <div class="client-card-accent" style="background:#9b87f5"></div>
+          <div class="client-card-name">Northshore Property Group</div>
+          <div class="client-card-sector" style="color:#9b87f5">Real Estate · Property Management</div>
+          <div class="client-card-teaser">A growing residential property management firm sitting on two years of leasing data they've never analyzed. Renewal rates are drifting down. Vacancy days are creeping up. Leadership knows something is wrong.</div>
+          <div class="client-card-tags"><span class="tag">Renewals</span><span class="tag">Pricing</span><span class="tag">NOI</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PHASES PAGE ── -->
+  <div class="page" id="page-phases">
+    <div class="hero">
+      <div class="hero-tag">Assignment Structure</div>
+      <h1>The Four <em>Phases</em></h1>
+      <p class="hero-desc">Each phase connects directly to content you've already covered in class — the Business Model Canvas, Infrastructure & Logistics, Cost Structure, and Validation. Your deck must address all four in order, building from operational logic to financial recommendation.</p>
+    </div>
+    <div class="content">
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:40px;">
+        <div style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">The consulting sequence</div>
+        <div style="display:flex;align-items:center;gap:0;font-size:12px;flex-wrap:wrap;gap:4px;">
+          <span style="background:rgba(62,207,176,0.12);color:var(--teal);padding:5px 12px;border-radius:100px;border:1px solid rgba(62,207,176,0.2);">Infrastructure & Logistics</span>
+          <span style="color:var(--muted);padding:0 4px;">→</span>
+          <span style="background:rgba(155,135,245,0.12);color:var(--purple);padding:5px 12px;border-radius:100px;border:1px solid rgba(155,135,245,0.2);">Prototype & Validate</span>
+          <span style="color:var(--muted);padding:0 4px;">→</span>
+          <span style="background:rgba(232,180,90,0.12);color:var(--accent);padding:5px 12px;border-radius:100px;border:1px solid rgba(232,180,90,0.2);">Validation Methods</span>
+          <span style="color:var(--muted);padding:0 4px;">→</span>
+          <span style="background:rgba(240,112,96,0.12);color:var(--coral);padding:5px 12px;border-radius:100px;border:1px solid rgba(240,112,96,0.2);">Cost Structure</span>
+          <span style="color:var(--muted);padding:0 4px;">→</span>
+          <span style="background:rgba(255,255,255,0.05);color:var(--text);padding:5px 12px;border-radius:100px;border:1px solid var(--border2);">Decision</span>
+        </div>
+      </div>
+
+      <!-- Phase 1 -->
+      <div class="client-section" style="padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);border-top:3px solid var(--teal);margin-bottom:16px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;">Phase 1 · Infrastructure, Logistics & the Business Model Canvas</div>
+        <div class="section-title" style="margin-bottom:12px;">Operational Logic & Cost Drivers</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:16px;">Remember from class: <em>infrastructure and logistics provide a solid and reliable formula that ensures consistency and can lead to scalability — without a plan, an increase in business can lead to failure.</em> This phase asks you to apply that thinking directly to your client. Use the Business Model Canvas as your framework.</p>
+
+        <div style="background:rgba(62,207,176,0.05);border:1px solid rgba(62,207,176,0.12);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px;">
+          <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:10px;">Course concepts to apply here</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:11px;padding:4px 10px;background:rgba(62,207,176,0.1);border:1px solid rgba(62,207,176,0.2);border-radius:100px;color:var(--teal);">Key Activities</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(62,207,176,0.1);border:1px solid rgba(62,207,176,0.2);border-radius:100px;color:var(--teal);">Key Resources</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(62,207,176,0.1);border:1px solid rgba(62,207,176,0.2);border-radius:100px;color:var(--teal);">Key Partnerships</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(62,207,176,0.1);border:1px solid rgba(62,207,176,0.2);border-radius:100px;color:var(--teal);">7Rs of Logistics</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(62,207,176,0.1);border:1px solid rgba(62,207,176,0.2);border-radius:100px;color:var(--teal);">Infrastructure Components</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(62,207,176,0.1);border:1px solid rgba(62,207,176,0.2);border-radius:100px;color:var(--teal);">Supply Chain</span>
+          </div>
+        </div>
+
+        <p style="font-size:13px;color:var(--muted);font-weight:500;margin-bottom:12px;">Your slides for this phase must cover:</p>
+        <div class="phase-items">
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Key Activities map</strong> — using the Business Model Canvas, identify the things QSS must do every day to execute this engagement successfully (e.g., discovery, analysis, stakeholder interviews, prototype build, reporting). These are not vague tasks — they are specific, named activities with a verb.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Key Resources</strong> — what does QSS need to own or control to deliver? Identify physical resources (laptops, office space), intellectual resources (data access, client knowledge), human resources (which roles on the team), and financial resources (budget, tools, software subscriptions).</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Key Partnerships</strong> — who outside of QSS would this project require working with? This could be client-side teams, data vendors, subject matter experts, or implementation partners. Describe what each partner contributes and why QSS can't do it alone.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Infrastructure needs</strong> — what computing, IT services, facilities, or transport would this engagement require? Think beyond "a laptop" — consider data pipelines, software platforms, security tools, and any physical infrastructure your client needs to operate.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Logistics check</strong> — apply the 7Rs of Logistics to your client's delivery challenge: are they getting the right product to the right customer at the right price, in the right quantity, in the right condition, at the right time, in the right place? Where is the 7Rs chain breaking down for them?</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Execution failure points</strong> — at least two specific ways this project could break down, and your mitigation plan for each. "Something might go wrong" is not a failure point — name the exact moment and reason.</div>
+        </div>
+        <div style="margin-top:16px;padding:12px 16px;background:rgba(62,207,176,0.05);border-radius:var(--radius-sm);border:1px solid rgba(62,207,176,0.12);">
+          <span style="font-size:11px;color:var(--teal);font-weight:600;">Goal: </span>
+          <span style="font-size:12px;color:var(--muted);">Show that you understand how business activities translate into resources, costs, and operational risk — using the same Business Model Canvas framework you've been building with in class.</span>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="client-section" style="padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);border-top:3px solid var(--purple);margin-bottom:16px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:8px;">Phase 2 · Validation — Steps & Assumptions</div>
+        <div class="section-title" style="margin-bottom:12px;">Prototype & Assumption Testing</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:16px;">From class: <em>validation is the process of determining if there is a need for an idea or product — a useful tool that reduces the cost and risk of production while speeding up delivery and launch.</em> Before QSS commits to a full engagement, it needs to test its most critical assumptions first.</p>
+
+        <div style="background:rgba(155,135,245,0.05);border:1px solid rgba(155,135,245,0.12);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px;">
+          <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:10px;">Course concepts to apply here</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:11px;padding:4px 10px;background:rgba(155,135,245,0.1);border:1px solid rgba(155,135,245,0.2);border-radius:100px;color:var(--purple);">Steps of Validation</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(155,135,245,0.1);border:1px solid rgba(155,135,245,0.2);border-radius:100px;color:var(--purple);">Assumptions</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(155,135,245,0.1);border:1px solid rgba(155,135,245,0.2);border-radius:100px;color:var(--purple);">Prototyping</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(155,135,245,0.1);border:1px solid rgba(155,135,245,0.2);border-radius:100px;color:var(--purple);">Pivot Logic</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(155,135,245,0.1);border:1px solid rgba(155,135,245,0.2);border-radius:100px;color:var(--purple);">Goals of Validation</span>
+          </div>
+        </div>
+
+        <p style="font-size:13px;color:var(--muted);font-weight:500;margin-bottom:12px;">Your slides for this phase must include:</p>
+        <div class="phase-items">
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Your written assumptions</strong> — state 3–5 assumptions your team is making about this client and their situation. Remember from class: assumptions are aspects of your idea that, if invalidated, would require you to pivot. Format them clearly: "We assume that [X] is true because [Y]." Test your most influential ones first.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">A draft prototype</strong> — what would QSS actually deliver for this client? Show a rough version: a mock dashboard layout, a sample report outline, a process map wireframe, a decision framework, or a workflow sketch. It does not need to be polished — it needs to be real and testable.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">What success looks like</strong> — from your validation notes: determine what success will be defined as for you. Before gathering any feedback, define the benchmark. If you show this prototype to 10 people, what response would tell you it's working?</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Pivot logic</strong> — if your customer segment rejects part of your idea, what changes to your approach would you make to meet their needs? Map out at least one "if this assumption fails, we do this instead" scenario.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Iteration plan</strong> — who gives feedback on the prototype, how often, and what "improved" looks like after the first cycle.</div>
+        </div>
+        <div style="margin-top:16px;padding:12px 16px;background:rgba(155,135,245,0.05);border-radius:var(--radius-sm);border:1px solid rgba(155,135,245,0.12);">
+          <span style="font-size:11px;color:var(--purple);font-weight:600;">Goal: </span>
+          <span style="font-size:12px;color:var(--muted);">Show that your team has followed the validation steps from class: you've written your goals and assumptions, defined what success means, and built something you can actually test — before QSS commits to the full engagement.</span>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="client-section" style="padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);border-top:3px solid var(--accent);margin-bottom:16px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">Phase 3 · Validation Methods & Data Collection</div>
+        <div class="section-title" style="margin-bottom:12px;">Validation Plan & Data Strategy</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:16px;">From class: <em>the goal of validation is to find out what your customer segment is willing to buy and for how much — it is not to argue, and you should not try to lead them to a conclusion.</em> This phase asks you to design the specific methods QSS would use to gather the evidence that either confirms or challenges your assumptions.</p>
+
+        <div style="background:rgba(232,180,90,0.05);border:1px solid rgba(232,180,90,0.12);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px;">
+          <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Course concepts to apply here</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:11px;padding:4px 10px;background:rgba(232,180,90,0.1);border:1px solid rgba(232,180,90,0.2);border-radius:100px;color:var(--accent);">Primary Forms of Validation</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(232,180,90,0.1);border:1px solid rgba(232,180,90,0.2);border-radius:100px;color:var(--accent);">Question Styles</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(232,180,90,0.1);border:1px solid rgba(232,180,90,0.2);border-radius:100px;color:var(--accent);">Likert Scale</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(232,180,90,0.1);border:1px solid rgba(232,180,90,0.2);border-radius:100px;color:var(--accent);">Open-Ended Questions</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(232,180,90,0.1);border:1px solid rgba(232,180,90,0.2);border-radius:100px;color:var(--accent);">Demographic Questions</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(232,180,90,0.1);border:1px solid rgba(232,180,90,0.2);border-radius:100px;color:var(--accent);">Customer Segment Research</span>
+          </div>
+        </div>
+
+        <p style="font-size:13px;color:var(--muted);font-weight:500;margin-bottom:12px;">Your slides for this phase must include:</p>
+        <div class="phase-items">
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Which primary forms of validation you'd use</strong> — talking to customers directly, talking to experts, surveying, or research. For each one you choose, explain why it's the right tool for your specific client and assumption. Not every engagement needs all four.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Survey design (if applicable)</strong> — if your validation plan includes a survey, identify the question styles you'd use and why. From class, you know the tradeoffs: Likert scales measure attitudes but respondents can click through; open-ended questions enable rich responses but are harder to analyze; multiple choice is clean but limits what you can learn. Make the right choice for what you're trying to discover.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Who you're validating with</strong> — your customer segment matters. Describe exactly who you'd talk to, survey, or research. Use demographic thinking: what characteristics matter most for this client's problem (industry, role, age, geography, company size)?</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Data → decision flow</strong> — a process flow (visual or bullet-format) showing which specific data point or survey result would trigger which specific decision. Not "we would analyze it," but: if the Likert score on X is below 3.5, we recommend Y. If more than 60% of respondents say Z, we pivot.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Market size check</strong> — from validation steps in class: assess your market size. How many people/organizations fall into your client's target customer segment? Use this to determine whether the problem is big enough to justify QSS's engagement.</div>
+        </div>
+        <div style="margin-top:16px;padding:12px 16px;background:rgba(232,180,90,0.05);border-radius:var(--radius-sm);border:1px solid rgba(232,180,90,0.12);">
+          <span style="font-size:11px;color:var(--accent);font-weight:600;">Goal: </span>
+          <span style="font-size:12px;color:var(--muted);">Show that you know how to gather real evidence — not just describe data you'd want, but design the method, the questions, and the decision logic that turns responses into a clear recommendation.</span>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="client-section" style="padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);border-top:3px solid var(--coral);margin-bottom:0;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--coral);margin-bottom:8px;">Phase 4 · Cost Structure & Financial Reasoning</div>
+        <div class="section-title" style="margin-bottom:12px;">Financial Logic & Recommendation</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:16px;">From class: <em>the cost structure is a collection of business expenses that encompasses all the money needed to operate the business — this is more than just the cost to make a good or service.</em> This phase asks you to apply cost structure thinking to your client and to QSS, and turn it into a financially supported recommendation.</p>
+
+        <div style="background:rgba(240,112,96,0.05);border:1px solid rgba(240,112,96,0.12);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px;">
+          <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--coral);margin-bottom:10px;">Course concepts to apply here</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:11px;padding:4px 10px;background:rgba(240,112,96,0.1);border:1px solid rgba(240,112,96,0.2);border-radius:100px;color:var(--coral);">Fixed vs Variable Costs</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(240,112,96,0.1);border:1px solid rgba(240,112,96,0.2);border-radius:100px;color:var(--coral);">Cost-Driven vs Value-Driven</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(240,112,96,0.1);border:1px solid rgba(240,112,96,0.2);border-radius:100px;color:var(--coral);">Economies of Scale</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(240,112,96,0.1);border:1px solid rgba(240,112,96,0.2);border-radius:100px;color:var(--coral);">Cost Allocation</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(240,112,96,0.1);border:1px solid rgba(240,112,96,0.2);border-radius:100px;color:var(--coral);">Value-Based vs Cost-Based Pricing</span>
+            <span style="font-size:11px;padding:4px 10px;background:rgba(240,112,96,0.1);border:1px solid rgba(240,112,96,0.2);border-radius:100px;color:var(--coral);">Revenue Streams</span>
+          </div>
+        </div>
+
+        <p style="font-size:13px;color:var(--muted);font-weight:500;margin-bottom:12px;">Your slides for this phase must include:</p>
+        <div class="phase-items">
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Cost structure classification</strong> — identify your client's major fixed costs (expenses that stay the same regardless of business volume — like rent, salaried staff, and software subscriptions) and variable costs (expenses that change with activity — like materials, commissions, or per-unit delivery costs). This distinction matters because it tells you how the business scales.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Cost-driven vs. value-driven diagnosis</strong> — is your client's business model primarily cost-driven (competing on minimizing price through automation and efficiency) or value-driven (competing on quality, experience, or brand)? How does this affect what QSS should recommend and how it should price its own engagement?</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Basic cost-benefit analysis</strong> — what does this engagement cost QSS to deliver? What value does it create for the client? Show the math with clearly labeled assumptions. Every number must be traceable back to a source or stated assumption.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Economies of scale consideration</strong> — does your client's problem get better or worse as they grow? Where would an economies-of-scale effect kick in — meaning, where do their per-unit costs drop as volume increases? This matters for understanding whether QSS's solution has lasting value.</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Three-case sensitivity</strong> — best case, base case, worst case. Show what numbers change between scenarios and why. The worst case in particular should be grounded: what realistic set of conditions would lead to the engagement failing to pay back?</div>
+          <div class="phase-item" style="color:var(--muted)"><strong style="color:var(--text)">Recommendation with financial reason</strong> — Proceed / Proceed With Conditions / Do Not Proceed. Support it with one financial reason specific enough that a QSS executive could repeat it without the slides.</div>
+        </div>
+        <div style="margin-top:16px;padding:12px 16px;background:rgba(240,112,96,0.05);border-radius:var(--radius-sm);border:1px solid rgba(240,112,96,0.12);">
+          <span style="font-size:11px;color:var(--coral);font-weight:600;">Goal: </span>
+          <span style="font-size:12px;color:var(--muted);">Show that you understand the cost structure concepts from class — fixed vs. variable, cost-driven vs. value-driven, and cost allocation — and can apply them to make a financially grounded recommendation, not just a gut feeling dressed up in numbers.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── DELIVERABLES PAGE ── -->
+  <div class="page" id="page-deliverables">
+    <div class="hero">
+      <div class="hero-tag">What to Submit</div>
+      <h1>Three <em>Deliverables</em></h1>
+      <p class="hero-desc">Your team submits three connected pieces that work as a package. They're designed to reinforce each other — the one-pager forces synthesis, the memo forces rigor, the deck forces clarity.</p>
+    </div>
+    <div class="content">
+
+      <div class="deliverable-card">
+        <div class="deliverable-num">1</div>
+        <div class="deliverable-body">
+          <div class="deliverable-title">The One-Pager — Visual Snapshot</div>
+          <div class="deliverable-desc">A single-page visual document that gives a QSS executive a complete picture of the opportunity in under 60 seconds. Think of this as your "leave-behind." It does not repeat your slides — it distills them. This is a design challenge as much as a content challenge.</div>
+          <div class="deliverable-reqs">
+            <div class="req-item">Client name, what they do, and the core problem QSS is solving — 2–3 sentences max</div>
+            <div class="req-item">A simple operations or process flow showing how QSS would execute the work</div>
+            <div class="req-item">A cost/benefit snapshot — your key numbers, with labeled assumptions</div>
+            <div class="req-item">Your recommendation (Proceed / Proceed With Conditions / Do Not Proceed) with one supporting reason</div>
+            <div class="req-item"><strong>Format:</strong> PDF or designed document. Infographic layout strongly encouraged. This is not a paragraph summary — it should communicate visually.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="deliverable-card">
+        <div class="deliverable-num">2</div>
+        <div class="deliverable-body">
+          <div class="deliverable-title">The Slide Deck — Your Full Analysis</div>
+          <div class="deliverable-desc">An 8–10 slide deck that walks through your team's complete analysis across all four phases. Each section of the deck corresponds to one phase. Opening and closing framing is expected.</div>
+          <div class="deliverable-reqs">
+            <div class="req-item"><strong>Slide 1 — The Opportunity:</strong> Who is the client, what is the problem, and why does it matter right now?</div>
+            <div class="req-item"><strong>Slides 2–3 — Operations & Cost Logic (Phase 1):</strong> Workstreams, resource plan, cost drivers, failure points and mitigations</div>
+            <div class="req-item"><strong>Slides 4–5 — The Prototype (Phase 2):</strong> Draft artifact, assumptions being tested, iteration plan</div>
+            <div class="req-item"><strong>Slides 6–7 — Data & Validation Plan (Phase 3):</strong> Specific data needed, collection method, process flow, decisions enabled</div>
+            <div class="req-item"><strong>Slides 8–9 — Financial Logic & Recommendation (Phase 4):</strong> Cost-benefit analysis, ROI/payback metric, 3-case sensitivity, recommendation with financial reason</div>
+            <div class="req-item"><strong>Slide 10 — Risk & Open Questions:</strong> 2–3 things that could make your recommendation wrong</div>
+            <div class="req-item"><strong>Format:</strong> PDF or PowerPoint. Professional, clean design. This is an internal QSS deck — not a class project, not a school report.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="deliverable-card">
+        <div class="deliverable-num">3</div>
+        <div class="deliverable-body">
+          <div class="deliverable-title">The Supporting Memo — Show Your Work</div>
+          <div class="deliverable-desc">A 1–2 page internal QSS memo submitted alongside the deck. This is not a summary of your slides — it goes deeper. It's where you show the math, the sources, and the reasoning that couldn't fit in a slide.</div>
+          <div class="deliverable-reqs">
+            <div class="req-item">The full financial calculation for your cost-benefit analysis, with every assumption labeled and traceable</div>
+            <div class="req-item">Your three-case sensitivity table (best / base / worst) with the specific numbers that drive each scenario</div>
+            <div class="req-item">A citation list — minimum 3 credible external sources, including at least one financial or industry source</div>
+            <div class="req-item">Any additional data, research, or reasoning that supports your recommendation but didn't fit the deck</div>
+            <div class="req-item"><strong>Format:</strong> Word document or PDF. Internal QSS memo header. Professional tone. 1–2 pages only.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-top:8px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Submission checklist</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);cursor:pointer;line-height:1.5;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);">
+            Slide deck submitted as PDF or .pptx
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);cursor:pointer;line-height:1.5;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);">
+            Supporting memo submitted as PDF or .docx (1–2 pages)
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);cursor:pointer;line-height:1.5;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);">
+            One-pager submitted as PDF (1 page, visual layout)
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);cursor:pointer;line-height:1.5;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);">
+            At least 3 credible citations included in the memo
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);cursor:pointer;line-height:1.5;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);">
+            Financial model shows clearly labeled assumptions
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);cursor:pointer;line-height:1.5;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);">
+            All four phases addressed in the deck
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);cursor:pointer;line-height:1.5;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);">
+            A clear recommendation is stated with a financial reason
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GLOSSARY PAGE ── -->
+  <div class="page" id="page-glossary">
+    <div class="hero">
+      <div class="hero-tag">Reference</div>
+      <h1>Business <em>Glossary</em></h1>
+      <p class="hero-desc">Every term used in this assignment — and in the client profiles — explained in plain language. If you see a word in the portal you don't recognize, look it up here first.</p>
+    </div>
+    <div class="content">
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:32px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:16px;">🔍</span>
+        <input id="gloss-search" type="text" placeholder="Search terms..." oninput="filterGlossary(this.value)"
+          style="background:transparent;border:none;outline:none;font-family:'Sora',sans-serif;font-size:14px;color:var(--text);width:100%;caret-color:var(--accent);">
+      </div>
+
+      <!-- Category: Financial Terms -->
+      <div class="gloss-category" data-cat="financial">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">Financial Terms</div>
+        <div class="gloss-grid" id="gloss-financial"></div>
+      </div>
+
+      <!-- Category: Operations Terms -->
+      <div class="gloss-category" data-cat="operations" style="margin-top:36px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">Operations Terms</div>
+        <div class="gloss-grid" id="gloss-operations"></div>
+      </div>
+
+      <!-- Category: Data & Analytics Terms -->
+      <div class="gloss-category" data-cat="data" style="margin-top:36px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--purple);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">Data & Analytics Terms</div>
+        <div class="gloss-grid" id="gloss-data"></div>
+      </div>
+
+      <!-- Category: Business Strategy Terms -->
+      <div class="gloss-category" data-cat="strategy" style="margin-top:36px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--coral);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">Business Strategy Terms</div>
+        <div class="gloss-grid" id="gloss-strategy"></div>
+      </div>
+
+      <div id="gloss-noresult" style="display:none;text-align:center;padding:48px 0;font-size:14px;color:var(--muted);">No matching terms found. Try a different search.</div>
+
+    </div>
+  </div>
+
+  <!-- ── RUBRIC PLACEHOLDER (hidden, kept for routing safety) ── -->
+  <div class="page" id="page-rubric" style="display:none;"></div>
+
+  <!-- Glossary data + render script (placed before client pages so it runs early) -->
+  <script>
+  const GLOSSARY = {
+    financial: [
+      { term: "Revenue", def: "The total money a business brings in from selling its products or services. Think of it as the 'top line' — before any costs are subtracted. Example: if Eden signs 100 households at $10/month, their monthly revenue is $1,000." },
+      { term: "Cost", def: "Any money the business has to spend to operate. Costs come in many forms: staff salaries, software subscriptions, rent, raw materials, and more. Managing costs is just as important as growing revenue." },
+      { term: "Profit / Margin", def: "What's left after you subtract costs from revenue. Gross margin is revenue minus direct production costs. Operating margin also subtracts overhead. Net margin subtracts everything, including taxes. Higher margins mean more money retained per dollar of sales." },
+      { term: "ROI (Return on Investment)", def: "A measure of how much value you get back relative to what you spent. Formula: (Benefit – Cost) ÷ Cost, expressed as a percentage. An ROI of 150% means you got $1.50 back for every $1 you invested." },
+      { term: "Payback Period", def: "How long it takes to recover the cost of an investment through the returns it generates. If you invest $100K and it saves $50K/year, your payback period is 2 years. Shorter payback = lower risk." },
+      { term: "Cost-Benefit Analysis", def: "A structured comparison of all the costs of a decision versus all the expected benefits. The goal is to quantify whether the benefits outweigh the costs — and by how much. Strong analyses state every assumption explicitly." },
+      { term: "Sensitivity Analysis / 3-Case Model", def: "Testing how your financial conclusion changes if key assumptions turn out to be wrong. A 3-case model runs three scenarios: best case (optimistic assumptions), base case (realistic), and worst case (pessimistic). It shows how fragile or robust your recommendation is." },
+      { term: "Cash Runway", def: "How long a company can continue operating at its current spending rate before it runs out of cash. If a startup has $10M and spends $1M/month, it has 10 months of runway." },
+      { term: "Burn Rate", def: "The rate at which a company spends money — usually expressed as a monthly figure. A company 'burning' $200K/month is spending $200K more than it earns. Common in startups that are investing heavily before becoming profitable." },
+      { term: "Unit Economics", def: "The revenue and cost associated with a single unit — one customer, one product, one transaction. Strong unit economics means each individual sale or customer is profitable on its own, before considering overhead." },
+      { term: "LTV (Lifetime Value)", def: "The total revenue you expect to earn from one customer over their entire relationship with you. If a member pays $400/month and stays for 3 years, their LTV is $14,400. Higher LTV justifies higher spending to acquire customers." },
+      { term: "CAC (Customer Acquisition Cost)", def: "How much it costs, on average, to acquire one new customer. Includes all sales and marketing spend. LTV:CAC ratio is a key metric — a ratio above 3:1 is generally considered healthy." },
+      { term: "NOI (Net Operating Income)", def: "Used in real estate: the income a property generates after operating expenses but before taxes and debt payments. A higher NOI means the property is performing better for its owner." },
+      { term: "Breakeven", def: "The point at which revenue exactly equals costs — no profit, no loss. Below breakeven you're losing money; above it you're profitable. Knowing your breakeven point helps you understand how much you need to sell to survive." },
+    ],
+    operations: [
+      { term: "Workstream", def: "A distinct category of work within a larger project. A QSS engagement might have workstreams for discovery, data analysis, prototype development, and stakeholder communication. Breaking work into workstreams makes it easier to assign ownership and track progress." },
+      { term: "Resource Plan", def: "A plan that specifies who does what, and how much of their time. A resource plan for a QSS project would name the roles involved (e.g., Analyst, Data Engineer, Project Lead), estimate hours or percentages of FTE, and tie those resources to specific workstreams." },
+      { term: "Cost Driver", def: "A factor that causes a cost to increase or decrease. For a consulting project, cost drivers might include the number of hours worked, the tools required, the complexity of data integration, and the number of stakeholder interviews. Identifying cost drivers helps you forecast and control spending." },
+      { term: "Execution Risk", def: "A specific way a project could fail during implementation — not a vague 'something might go wrong,' but a concrete failure point. Examples: a client's data is too messy to analyze, a key stakeholder won't adopt the new process, the timeline is too aggressive for the team size." },
+      { term: "Process Flow / Process Map", def: "A visual or step-by-step description of how a process works — what happens first, what happens next, who is responsible at each step, and what decisions are made along the way. A process map makes invisible workflows visible." },
+      { term: "Supply Chain", def: "The full chain of people, organizations, and activities involved in getting a product from raw materials to the end customer. For GreenLoop, this includes fabric suppliers, manufacturers, shipping logistics, and wholesale retailers." },
+      { term: "Lead Time", def: "The time between placing an order or making a decision and seeing the result. In manufacturing, lead time is how long it takes to produce and deliver goods. Long lead times make it harder to respond to demand changes quickly." },
+      { term: "Stockout", def: "When demand for a product exceeds available inventory — you've run out of stock. Stockouts mean lost sales, disappointed customers, and potentially damaged business relationships. They usually result from poor forecasting or supply chain disruptions." },
+      { term: "Churn / Attrition", def: "The rate at which customers stop doing business with you. Monthly churn of 5% means 5 out of every 100 customers cancel in a given month. High churn is expensive because you must constantly acquire new customers just to stay flat." },
+      { term: "Onboarding", def: "The process of getting a new customer, employee, or partner up to speed and successfully using your product or service. Strong onboarding reduces early churn because people understand and experience value faster." },
+      { term: "SLA (Service Level Agreement)", def: "A commitment to a specific standard of service performance — usually involving time. For Northshore, an SLA might say: 'All maintenance requests will receive a response within 72 hours.' Tracking SLA adherence helps identify operational failures before they cause bigger problems." },
+      { term: "Prototype", def: "An early, simplified version of a product, tool, or process — built to test assumptions and get feedback, not to be the final version. A prototype can be a rough sketch, a mock dashboard, a sample report, or even a manual process that mimics what an automated system would do." },
+    ],
+    data: [
+      { term: "KPI (Key Performance Indicator)", def: "A specific, measurable metric used to track progress toward a goal. A KPI should be: meaningful (it actually tells you something important), measurable (you can collect the data), and actionable (if it moves in the wrong direction, you know what to do). Example: 30-day readmission rate for Harborview." },
+      { term: "Baseline", def: "Your starting measurement — the current state before any changes are made. You need a baseline to know whether an intervention actually worked. If Northshore's renewal rate is 54% today, that's the baseline. After improvements, you compare against it." },
+      { term: "Data Validation", def: "The process of confirming that your data is accurate, complete, and trustworthy before you use it to make decisions. Includes checking for missing values, duplicate records, outliers, and inconsistencies. Skipping this step leads to wrong conclusions." },
+      { term: "Insight", def: "A conclusion drawn from data that is actionable and non-obvious. 'Our renewal rate is 54%' is a fact. 'Our renewal rate is lowest among tenants whose maintenance requests take more than 5 days to resolve' is an insight — it tells you what to do about it." },
+      { term: "Predictive Model / Risk Score", def: "A mathematical model trained on historical data that estimates the likelihood of a future event. Harborview wants a readmission risk score — a model that uses patient data at discharge to predict which patients are most likely to be readmitted within 30 days." },
+      { term: "Cohort Analysis", def: "Grouping customers, users, or events by a shared characteristic (like when they joined or what they purchased) and tracking how that group behaves over time. Useful for understanding churn — e.g., do members who join in January churn faster than those who join in September?" },
+      { term: "Segmentation", def: "Dividing a population into meaningful sub-groups based on shared characteristics. Customer segmentation might group customers by age, purchase behavior, or geography. Good segmentation reveals that different groups need different strategies." },
+      { term: "Process Mapping", def: "Creating a visual or written map of how a workflow or decision-making process currently works, end-to-end. This is how you identify bottlenecks, redundancies, and the exact points where something breaks down. A prerequisite for redesigning any process." },
+      { term: "A/B Testing", def: "A method of comparing two versions of something — a product, a message, a process — by randomly exposing different groups to each version and measuring which performs better. Used to validate assumptions with real evidence before rolling out a change widely." },
+      { term: "Leading Indicator", def: "A metric that changes before the outcome you care about — giving you advance warning. For Apex, visit frequency in month 2 might be a leading indicator of whether a member cancels in month 6. Leading indicators let you intervene early." },
+      { term: "Lagging Indicator", def: "A metric that changes after the outcome has already occurred — a post-mortem signal. Cancellation is a lagging indicator of dissatisfaction; by the time it shows up, it's too late to save the customer. Good analytics systems use leading indicators to catch problems before lagging ones confirm them." },
+    ],
+    strategy: [
+      { term: "Business Model", def: "How a company creates value for customers and captures revenue from that value. Includes: who the customer is, what they're paying for, how the company delivers it, and how it charges. Eden's business model is selling hardware once and charging a recurring monthly subscription for the software." },
+      { term: "B2B (Business-to-Business)", def: "A company that sells its products or services to other businesses, not individual consumers. GreenLoop's wholesale channel is B2B — they sell to retail stores, not directly to shoppers." },
+      { term: "B2C / DTC (Business-to-Consumer / Direct-to-Consumer)", def: "A company that sells directly to individual consumers. GreenLoop's website sales are DTC. The distinction matters because B2B and B2C require very different sales, marketing, and operations strategies." },
+      { term: "Go-to-Market Strategy", def: "A plan for how a company will reach its target customers and generate sales for a product. It covers the target customer, value proposition, channel (how you sell), pricing, and messaging. Eden needs a new go-to-market strategy for the suburban homeowner segment." },
+      { term: "Value Proposition", def: "The specific benefit your product or service offers to a customer — why they should choose you over alternatives. A strong value proposition is concrete and speaks to the customer's actual problem. 'We help property managers reduce tenant turnover by 15%' is stronger than 'we offer data analytics solutions.'" },
+      { term: "Competitive Advantage", def: "Something a company does better than its competitors in a way that is difficult to copy. Sustainable competitive advantages can come from brand, proprietary technology, cost structure, relationships, or operational excellence." },
+      { term: "Feasibility", def: "Whether something can realistically be done — given the available time, money, people, and skills. A feasibility assessment asks: is this technically possible? Is it financially viable? Can we actually execute it? This is the core question of the entire QSS Deal Room assignment." },
+      { term: "Stakeholder", def: "Anyone who has an interest in, or is affected by, a decision or project. For a QSS engagement, stakeholders might include the client's leadership team, the employees who will use the new system, the customers affected by the change, and QSS itself." },
+      { term: "Recommendation", def: "In a business context, a recommendation isn't just an opinion — it's a supported conclusion with a stated reason. A strong recommendation names the decision (Proceed / Proceed With Conditions / Do Not Proceed), the primary reason, and the key condition or risk that could change the call." },
+      { term: "Pilot Program", def: "A small-scale test of an idea before committing to a full rollout. Running a pilot on two of Northshore's 22 properties before deploying a new analytics system across all 22 is lower risk and produces real data to inform the full launch." },
+      { term: "Scalability", def: "Whether a business model, process, or product can handle significant growth without breaking or requiring proportionally more resources. A solution is scalable if serving 10x the customers doesn't require 10x the staff." },
+      { term: "Series B (Funding Round)", def: "A stage of startup funding — typically the third significant round of outside investment (after Seed and Series A). By Series B, a company has usually proven its core product works and is raising capital to scale. Eden's $22M Series B was raised to fund their suburban expansion." },
+    ]
+  };
+
+  function renderGlossary(filterText) {
+    let totalVisible = 0;
+    Object.keys(GLOSSARY).forEach(cat => {
+      const container = document.getElementById('gloss-' + cat);
+      const section = container ? container.closest('.gloss-category') : null;
+      if (!container) return;
+      const terms = filterText
+        ? GLOSSARY[cat].filter(t => t.term.toLowerCase().includes(filterText) || t.def.toLowerCase().includes(filterText))
+        : GLOSSARY[cat];
+      totalVisible += terms.length;
+      if (section) section.style.display = terms.length ? '' : 'none';
+      container.innerHTML = terms.map(t => `
+        <div class="gloss-item">
+          <div class="gloss-term">${highlight(t.term, filterText)}</div>
+          <div class="gloss-def">${highlight(t.def, filterText)}</div>
+        </div>
+      `).join('');
+    });
+    const nr = document.getElementById('gloss-noresult');
+    if (nr) nr.style.display = totalVisible === 0 ? 'block' : 'none';
+  }
+
+  function highlight(text, query) {
+    if (!query) return text;
+    const regex = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+    return text.replace(regex, '<mark style="background:rgba(232,180,90,0.25);color:var(--accent);border-radius:2px;padding:0 2px;">$1</mark>');
+  }
+
+  function filterGlossary(val) { renderGlossary(val.trim().toLowerCase()); }
+
+  document.addEventListener('DOMContentLoaded', () => renderGlossary(''));
+  </script>
+
+  <style>
+  .gloss-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .gloss-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px 18px; transition:border-color .2s; }
+  .gloss-item:hover { border-color:var(--border2); }
+  .gloss-term { font-size:14px; font-weight:500; color:var(--text); margin-bottom:7px; }
+  .gloss-def { font-size:12px; color:var(--muted); line-height:1.7; }
+  @media(max-width:640px){ .gloss-grid{ grid-template-columns:1fr; } }
+  </style>
+
+  <!-- ══════════════════════ CLIENT PAGES ══════════════════════ -->
+
+  <!-- RUBRIC PAGE stub kept for old routing -->
+  <div class="page" id="page-rubric-old" style="display:none;"></div>
+
+  <!-- Glossary data + render script (placed before client pages so it runs early) -->
+  <script>
+  // already defined above
+  </script>
+
+  <!-- ══════════════════════ CLIENT PAGES ══════════════════════ -->
+
+  <!-- EDEN -->
+  <div class="page" id="page-client-eden">
+    <div class="client-hero" style="background:linear-gradient(135deg,#0e1117,#111a14);">
+      <div class="client-hero::before" style="background:radial-gradient(circle,rgba(94,196,122,0.08) 0%,transparent 70%)"></div>
+      <div class="back-btn" onclick="showPage('overview')">← Back to clients</div>
+      <div class="client-name-lg" style="color:var(--text)">Eden Home Solutions</div>
+      <div class="client-sector-lg" style="color:#5ec47a">Smart Home · Consumer Tech · Series B</div>
+      <div class="client-tagline">"The smart home company that works — just not everywhere it needs to."</div>
+    </div>
+    <div class="client-content">
+
+      <div class="fact-grid">
+        <div class="fact-box"><div class="fact-value" style="color:#5ec47a">$14.2M</div><div class="fact-label">Annual recurring revenue</div></div>
+        <div class="fact-box"><div class="fact-value" style="color:#5ec47a">22,000</div><div class="fact-label">Active households</div></div>
+        <div class="fact-box"><div class="fact-value" style="color:#5ec47a">71%</div><div class="fact-label">Urban market share (core cities)</div></div>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">Company Background</div>
+        <p>Eden Home Solutions was founded six years ago by two electrical engineers who were convinced that home automation was too complicated and too expensive for the average renter. Their first product — a wireless hub that connected to existing light switches, thermostats, and door locks without rewiring — became a breakout hit in dense urban apartment buildings. Property managers loved it because no construction was required. Tenants loved it because it worked reliably and didn't require a $3,000 installation fee.</p>
+        <p>Eden grew almost entirely through B2B partnerships with apartment building operators. A property signs an enterprise deal, Eden installs the hub in common areas and individual units, and tenants access everything through a clean mobile app. The revenue model is a combination of a one-time hardware kit fee per unit and a monthly subscription for the software layer ($8–12/month per unit, depending on contract size). At their peak urban density, margins were strong and churn was low.</p>
+        <p>Two years ago, Eden raised a $22M Series B round with one primary thesis: that the same product could work in suburban single-family homes. The suburban homeowner market is ten times larger. The path seemed obvious.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">The Problem</div>
+        <p>The suburban expansion has not gone according to plan. Eden has signed deals with three regional homebuilder partnerships and launched a direct-to-consumer channel for existing homeowners, but the numbers are significantly behind projections eighteen months into the expansion.</p>
+        <p>Urban apartment deals closed at an average of 340 units per contract. Suburban homebuilder deals average 18 units per quarter per builder — and the direct-to-consumer channel is acquiring customers at a cost of $210 per household, nearly four times the enterprise cost. The monthly subscription churn rate in suburban markets is 8.4% — compared to 1.9% in urban apartment markets.</p>
+        <p>Leadership's instinct is that the product needs to be simplified for homeowners who don't have an on-site property manager to help with setup. The product team thinks the issue is pricing — suburban homeowners compare Eden to off-the-shelf smart home hardware from big box retailers and balk at the subscription. The sales team thinks the channel strategy is wrong and that Eden needs local installation partners instead of trying to sell direct.</p>
+        <p>Nobody has done the analysis to know which of these is right. That's the ask to QSS.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">Financial Situation</div>
+        <p>Eden is 14 months from its current cash runway at current burn. The suburban expansion is burning $680K/month in sales, marketing, and operational overhead — and the segment is not yet profitable. The urban business remains healthy and cash-generative, but the board has made clear that the next financing round will require demonstrated suburban traction.</p>
+        <p>Eden's leadership has set a threshold: if the suburban segment cannot reach breakeven unit economics (i.e., monthly subscription revenue covering customer acquisition cost within 12 months) within the next fiscal year, they will consider exiting the consumer channel and focusing on B2B homebuilder-only.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">What Eden Wants From QSS</div>
+        <div class="signal-list">
+          <div class="signal-item"><div class="signal-icon" style="color:#5ec47a">→</div><div class="signal-text"><strong>Diagnose the suburban churn problem.</strong> Is it product complexity? Pricing? Wrong customer segment? Wrong channel? Eden needs to know what's actually driving the 8.4% monthly churn before they spend another dollar trying to fix it.</div></div>
+          <div class="signal-item"><div class="signal-icon" style="color:#5ec47a">→</div><div class="signal-text"><strong>Model the economics of each growth path.</strong> Enterprise homebuilder deals vs. direct-to-consumer vs. a local installer partner network — what are the unit economics, payback periods, and capital requirements for each path?</div></div>
+          <div class="signal-item"><div class="signal-icon" style="color:#5ec47a">→</div><div class="signal-text"><strong>Recommend a focused suburban strategy.</strong> With 14 months of runway, Eden cannot pursue all three paths simultaneously. QSS should help leadership pick one, resource it properly, and define the metrics that would prove it's working.</div></div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">Key questions your team must address</div>
+        <p>What data would you need to distinguish between a product problem, a pricing problem, and a channel problem? How would you prototype a recommendation before Eden commits resources to it? What does "breakeven unit economics within 12 months" actually translate to in terms of churn rate, CAC, and LTV — and which of Eden's three paths gets there first?</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HARBORVIEW -->
+  <div class="page" id="page-client-harborview">
+    <div class="client-hero" style="background:linear-gradient(135deg,#0e1117,#101520);">
+      <div class="back-btn" onclick="showPage('overview')">← Back to clients</div>
+      <div class="client-name-lg">Harborview Health Network</div>
+      <div class="client-sector-lg" style="color:#5ba3f5">Healthcare · Regional Hospital · Nonprofit</div>
+      <div class="client-tagline">"The data has been sitting there for two years. No one has looked at it."</div>
+    </div>
+    <div class="client-content">
+
+      <div class="fact-grid">
+        <div class="fact-box"><div class="fact-value" style="color:#5ba3f5">4</div><div class="fact-label">Hospital campuses</div></div>
+        <div class="fact-box"><div class="fact-value" style="color:#5ba3f5">18.4%</div><div class="fact-label">30-day readmission rate</div></div>
+        <div class="fact-box"><div class="fact-value" style="color:#5ba3f5">$2.1M</div><div class="fact-label">Est. annual CMS penalty exposure</div></div>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">Organization Background</div>
+        <p>Harborview Health Network is a regional nonprofit hospital system operating four campuses across two counties. Founded in 1961 as a community hospital serving a mid-sized port city, Harborview has grown through two decades of acquisitions into a full-spectrum network offering emergency, surgical, primary care, and behavioral health services. They employ approximately 2,800 clinical and administrative staff and serve roughly 94,000 unique patients per year.</p>
+        <p>Harborview is not in financial distress — their operating margin is thin but stable at approximately 1.8%. However, they are facing increasing pressure from two directions: the federal CMS (Centers for Medicare and Medicaid Services) Hospital Readmissions Reduction Program, which penalizes hospitals financially for excess readmissions in specific diagnostic categories, and a competitive threat from a regional for-profit hospital chain that opened a new facility 11 miles from Harborview's largest campus eighteen months ago.</p>
+        <p>Their CMO (Chief Medical Officer) and COO have jointly agreed that improving post-discharge care coordination is their single highest-priority operational initiative for the coming fiscal year. They hired an analytics coordinator eight months ago specifically to address this. She has built a comprehensive discharge dataset going back 26 months — and has had almost no time to actually analyze it because she has been consumed by reporting requests from clinical leadership.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">The Problem</div>
+        <p>Harborview's 30-day readmission rate of 18.4% is 3.1 percentage points above the national average for hospital systems of their size and payer mix. CMS has flagged them for excess readmissions in three diagnostic categories: heart failure, pneumonia, and hip/knee replacement. The estimated annual CMS penalty exposure from these flags is approximately $2.1 million — a meaningful number for a system operating at 1.8% margin.</p>
+        <p>Beyond the financial penalty, clinical leadership believes that many of these readmissions are preventable. Post-discharge follow-up is inconsistent: some patients receive a nurse phone call within 48 hours, some receive a follow-up appointment, and some receive nothing until they show up in the emergency department. The process is not standardized, and there is no systematic way to identify which discharged patients are at highest risk of readmission before something goes wrong.</p>
+        <p>The analytics coordinator has identified that the discharge dataset contains enough information to build a basic readmission risk score — but she hasn't been given the resources, time, or organizational authority to implement anything that would change clinical workflows. Her analysis has been presented to the CMO twice in the form of internal memos that have not resulted in action.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">Financial Situation</div>
+        <p>Each percentage point reduction in readmission rate across Harborview's system translates to approximately 940 fewer readmissions per year, based on their patient volume and current rate. The fully-loaded cost of an avoidable readmission — including direct clinical costs, bed utilization, and CMS penalty risk — is estimated internally at $8,200 per event. A 2-point reduction in readmission rate would generate approximately $15.4M in cost avoidance and penalty reduction annually.</p>
+        <p>The CMO has a discretionary budget of $800K for care coordination initiatives this fiscal year. She is willing to allocate up to $350K to an analytics and workflow implementation project if there is a credible business case.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">What Harborview Wants From QSS</div>
+        <div class="signal-list">
+          <div class="signal-item"><div class="signal-icon" style="color:#5ba3f5">→</div><div class="signal-text"><strong>Build a readmission risk stratification framework.</strong> Using the existing discharge dataset, QSS should design a model (or model outline) that identifies which discharged patients are at high, medium, and low risk of readmission within 30 days — without requiring new data collection.</div></div>
+          <div class="signal-item"><div class="signal-icon" style="color:#5ba3f5">→</div><div class="signal-text"><strong>Design a tiered post-discharge intervention protocol.</strong> Different risk levels warrant different interventions. A high-risk heart failure patient should receive something different from a low-risk hip replacement patient. QSS should prototype what a tiered protocol looks like operationally — not clinically design it, but map the workflow.</div></div>
+          <div class="signal-item"><div class="signal-icon" style="color:#5ba3f5">→</div><div class="signal-text"><strong>Quantify the financial case for the CMO.</strong> The $350K budget decision requires a clear financial argument. QSS should model the expected ROI of a readmission reduction initiative — with realistic assumptions about what a 1–2 point reduction would require and what it would return.</div></div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">Key questions your team must address</div>
+        <p>What variables in a discharge dataset are most predictive of readmission risk, and how would you turn those into a workable risk score for clinical staff? What does the prototype of a "tiered intervention protocol" look like — and how would you test whether it changes behavior? How do you translate a readmission rate reduction into a dollar figure that justifies a $350K investment?</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- GREENLOOP -->
+  <div class="page" id="page-client-greenloop">
+    <div class="client-hero" style="background:linear-gradient(135deg,#0e1117,#0e1714);">
+      <div class="back-btn" onclick="showPage('overview')">← Back to clients</div>
+      <div class="client-name-lg">GreenLoop Apparel</div>
+      <div class="client-sector-lg" style="color:#3ecfb0">Sustainable Fashion · B2B Wholesale · DTC</div>
+      <div class="client-tagline">"We can't sell what we can't predict we'll have."</div>
+    </div>
+    <div class="client-content">
+
+      <div class="fact-grid">
+        <div class="fact-box"><div class="fact-value" style="color:#3ecfb0">$6.8M</div><div class="fact-label">Annual revenue (blended)</div></div>
+        <div class="fact-box"><div class="fact-value" style="color:#3ecfb0">34%</div><div class="fact-label">B2B wholesale (growing)</div></div>
+        <div class="fact-box"><div class="fact-value" style="color:#3ecfb0">19%</div><div class="fact-label">Est. revenue lost to stockouts</div></div>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">Company Background</div>
+        <p>GreenLoop Apparel is a four-year-old sustainable fashion brand that designs, manufactures, and sells a line of everyday basics — t-shirts, hoodies, joggers, and outerwear — made entirely from certified recycled and organic materials. The founders came from the conventional apparel industry and were deliberately building an alternative: a brand that could be transparent about its supply chain, certifiable under third-party environmental standards (they hold B-Corp and GOTS certifications), and still priced accessibly enough for mainstream consumers.</p>
+        <p>For the first two years, GreenLoop operated as a pure direct-to-consumer brand, selling exclusively through their own website and two seasonal pop-up markets. Growth was steady but modest. The inflection point came when a regional outdoor retailer placed a wholesale order for 1,200 units of their recycled-cotton hoodie. The retailer sold through in six weeks and reordered. Three more wholesale accounts followed within four months. The B2B wholesale channel has grown from zero to 34% of revenue in 18 months — and it is growing faster than the DTC business.</p>
+        <p>This is the good news. The bad news is that GreenLoop's operations were built for a DTC business, not a wholesale one. And the differences are significant.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">The Problem</div>
+        <p>GreenLoop's supply chain is built around small-batch, made-to-order production with a 14–18 week lead time from their two certified manufacturers — one in Portugal and one in Vietnam. For DTC, this worked because they could plan production 4 months ahead based on modest, predictable demand. For wholesale, it doesn't work — retailers need confirmed inventory commitments 6–8 months in advance, and they order in volumes that GreenLoop often can't guarantee without committing to production before knowing the retailer's final order size.</p>
+        <p>The result: GreenLoop has experienced four significant stockout events in the past 12 months — situations where they received confirmed wholesale orders they could not fulfill at full volume. In three of those cases, the retailer accepted a partial fulfillment. In one case, the retailer cancelled the order and has not reordered. Additionally, GreenLoop has ended up with significant overstock positions on two SKUs (a particular colorway of their signature jogger and their lightweight rain shell) — inventory that has been discounted 35% to move and has compressed margins on those items.</p>
+        <p>The operations director has been managing all of this manually — tracking purchase orders in spreadsheets, production timelines in a shared Google Doc, and retailer commitments in email threads. There is no system. There is no forecast. There is no early warning when a wholesale account's order timeline doesn't match a production lead time.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">Financial Situation</div>
+        <p>GreenLoop's blended gross margin is 52% — strong for the industry. But the stockout losses (estimated at 19% of potential wholesale revenue in the last fiscal year) and the overstock writedowns ($142K in the past year) are real cash drains. If the stockout problem were solved and overstock reduced by 50%, the company estimates it would recover approximately $380K in annual contribution margin — more than the full salary cost of an operations analyst.</p>
+        <p>The founders are currently bootstrapped and are beginning to explore a small raise ($1.5–2M) to fund inventory and operations improvements. Any investment in operations needs to have a clear financial story: what does it cost, what does it return, and when does it pay back?</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">What GreenLoop Wants From QSS</div>
+        <div class="signal-list">
+          <div class="signal-item"><div class="signal-icon" style="color:#3ecfb0">→</div><div class="signal-text"><strong>Map and diagnose the current operations flow.</strong> Before recommending solutions, QSS should document what actually happens today — from retailer order inquiry to production commitment to delivery — and identify the specific points where mismatches occur between demand signals and supply capacity.</div></div>
+          <div class="signal-item"><div class="signal-icon" style="color:#3ecfb0">→</div><div class="signal-text"><strong>Design a minimum viable forecasting and inventory system.</strong> GreenLoop doesn't need enterprise software — they need a system that is simple enough to actually use with a 6-person ops team. QSS should prototype what a basic demand forecasting and inventory tracking workflow would look like for a company of their size.</div></div>
+          <div class="signal-item"><div class="signal-icon" style="color:#3ecfb0">→</div><div class="signal-text"><strong>Build the financial case for the operations investment.</strong> The founders need a clear answer to: "What does it cost to fix this, and what does fixing it return?" QSS should model the cost of the operations improvement against the revenue and margin recovery from reduced stockouts and overstock.</div></div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">Key questions your team must address</div>
+        <p>How do you diagnose which part of an operations flow is creating a mismatch — the demand side (forecasting), the supply side (production commitments), or the communication layer between them? What does a "minimum viable" operations system look like for a 6-person team — and what assumptions does that require about their capacity to adopt new tools? How do you convert stockout and overstock losses into a financial model that justifies an operations investment?</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- APEX -->
+  <div class="page" id="page-client-apex">
+    <div class="client-hero" style="background:linear-gradient(135deg,#0e1117,#1a100e);">
+      <div class="back-btn" onclick="showPage('overview')">← Back to clients</div>
+      <div class="client-name-lg">Apex Performance Sports Group</div>
+      <div class="client-sector-lg" style="color:#f07060">Sports Performance · Premium Fitness · Multi-Site</div>
+      <div class="client-tagline">"Members join because of what we promise. They leave because of what we don't deliver."</div>
+    </div>
+    <div class="client-content">
+
+      <div class="fact-grid">
+        <div class="fact-box"><div class="fact-value" style="color:#f07060">7</div><div class="fact-label">Active training facilities</div></div>
+        <div class="fact-box"><div class="fact-value" style="color:#f07060">31%</div><div class="fact-label">Annual member attrition rate</div></div>
+        <div class="fact-box"><div class="fact-value" style="color:#f07060">$4,800</div><div class="fact-label">Revenue per member per year</div></div>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">Company Background</div>
+        <p>Apex Performance Sports Group operates seven premium athletic training facilities across a metropolitan region. They are not a traditional gym — they position themselves as performance training centers, staffed by certified strength coaches and athletic trainers rather than personal trainers. Their members skew toward serious recreational athletes: competitive amateur cyclists, triathletes, adult rec-league sports participants, and people recovering from injuries who want structured athletic rehabilitation.</p>
+        <p>Membership is structured as an annual commitment at $400/month (Apex Premier) or a 6-month commitment at $450/month (Apex Flex). There are no month-to-month memberships — Apex believes the commitment structure is part of what makes their members take their training seriously. The model has worked: Apex has 3,200 active members across seven locations and generates approximately $15.4M in annual membership revenue, supplemented by $2.1M in personal coaching packages and equipment sales.</p>
+        <p>Three years ago, Apex was growing at 22% annually and had plans to open four more locations. Today, growth has stalled at approximately 6% — and the leadership team is convinced that the attrition problem is the root cause. They are right.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">The Problem</div>
+        <p>Apex's 31% annual attrition rate is extremely high for a premium, commitment-based fitness brand. Industry benchmarks for performance-oriented facilities with annual memberships typically run 18–22%. At Apex's member base and price point, the gap between their 31% attrition and a 20% benchmark represents approximately $1.7M in annual revenue — members who should have renewed but didn't.</p>
+        <p>The pattern of attrition is particularly troubling. Across all seven locations, members who cancel do so predominantly in three windows: during months 2–3 (early adopters who don't integrate the habit), around month 7–8 (mid-contract disengagement), and at contract renewal (month 12 or month 6). Exit surveys exist but have a 14% response rate, and the responses skew toward price complaints even when the data team suspects that utilization — how often members actually show up — is a stronger predictor.</p>
+        <p>Each of Apex's seven locations has its own general manager, its own coaching staff culture, and, functionally, its own unofficial policies. Two locations have significantly lower attrition than the others (19% and 21%), but no one has done a systematic analysis of what those locations are doing differently. The corporate team has anecdotal theories — one GM does monthly check-in calls with members who haven't been in for 10+ days; another offers a structured 90-day onboarding program — but nothing has been measured or replicated.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">Financial Situation</div>
+        <p>Apex's unit economics are strong when members stay. The fully-loaded cost to acquire a new member (marketing, trial, onboarding) runs approximately $620 per member. The lifetime value of a retained member who renews twice (3 years) is approximately $14,400 — an LTV:CAC ratio of 23:1. The lifetime value of a member who churns at month 8 is approximately $3,200 — an LTV:CAC ratio of 5:1. The difference is almost entirely in whether the retention interventions work.</p>
+        <p>Apex's CEO has approved a retention initiative budget of $280K for the current fiscal year. She has been explicit: the money should go toward analytics and system improvements, not discounts or promotions. "We are not going to buy our way out of an attrition problem," she said in the kick-off meeting with their ops team. "We need to understand why people leave and fix that."</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">What Apex Wants From QSS</div>
+        <div class="signal-list">
+          <div class="signal-item"><div class="signal-icon" style="color:#f07060">→</div><div class="signal-text"><strong>Identify the leading indicators of churn.</strong> Using Apex's existing check-in and membership data, QSS should design an analysis framework that identifies which member behaviors — visit frequency, session types, coach relationships, time of day patterns — most strongly predict early cancellation. The goal is an early warning system, not a post-mortem.</div></div>
+          <div class="signal-item"><div class="signal-icon" style="color:#f07060">→</div><div class="signal-text"><strong>Analyze and codify what the high-retention locations are doing.</strong> The two low-attrition locations have answers that Apex needs. QSS should design a framework for extracting those answers — through interviews, process documentation, or data comparison — and translating them into replicable operational standards.</div></div>
+          <div class="signal-item"><div class="signal-icon" style="color:#f07060">→</div><div class="signal-text"><strong>Build the financial model for the retention initiative.</strong> What does a 5-point reduction in annual attrition rate (from 31% to 26%) translate to in annual revenue and LTV? What would it cost to implement the interventions? What is the ROI, and over what time period does it pay back?</div></div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">Key questions your team must address</div>
+        <p>What data would you need to build a churn early warning system — and how far in advance of cancellation would you want to be able to predict it? How do you study what two locations are doing well and turn that into a replicable system for seven? And what does the math look like when you translate attrition reduction into LTV — specifically, how does the 31% → 26% scenario change the financial story for Apex?</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- NORTHSHORE -->
+  <div class="page" id="page-client-northshore">
+    <div class="client-hero" style="background:linear-gradient(135deg,#0e1117,#110e1a);">
+      <div class="back-btn" onclick="showPage('overview')">← Back to clients</div>
+      <div class="client-name-lg">Northshore Property Group</div>
+      <div class="client-sector-lg" style="color:#9b87f5">Real Estate · Residential Property Management</div>
+      <div class="client-tagline">"We know something is wrong. We just don't know what, where, or why."</div>
+    </div>
+    <div class="client-content">
+
+      <div class="fact-grid">
+        <div class="fact-box"><div class="fact-value" style="color:#9b87f5">4,800</div><div class="fact-label">Units under management</div></div>
+        <div class="fact-box"><div class="fact-value" style="color:#9b87f5">91.4%</div><div class="fact-label">Current occupancy rate</div></div>
+        <div class="fact-box"><div class="fact-value" style="color:#9b87f5">38%</div><div class="fact-label">Annual tenant turnover rate</div></div>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">Company Background</div>
+        <p>Northshore Property Group is a privately held residential property management firm managing approximately 4,800 units across 22 apartment communities in a mid-sized metropolitan area. They do not own the properties — they manage them on behalf of institutional and individual real estate investors, charging a management fee of 8–10% of collected rent. The business model is fundamentally one of operational scale: the more units you manage well, the more fees you generate, and the more stable your revenue base.</p>
+        <p>Northshore was founded 14 years ago by a commercial real estate attorney who recognized that most small-to-midsize apartment owners had no operational infrastructure. She built the company by acquiring management contracts from local owners who wanted professional management but couldn't afford to build their own teams. Today, Northshore employs 44 people — 12 at corporate and 32 in the field across their 22 properties — and manages approximately $104M in annual rent collections.</p>
+        <p>Two years ago, Northshore implemented a new property management software platform that captures lease data, maintenance requests, renewal outcomes, vacancy timelines, and payment history at the unit level. Before that, most of this data lived in paper files and individual Excel sheets at each property. The new system is comprehensive. It has been running for 26 months. Nobody at Northshore has done any meaningful analysis of what's in it.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">The Problem</div>
+        <p>Over the past 18 months, Northshore has seen three metrics drift in the wrong direction simultaneously: occupancy has declined from a portfolio average of 94.2% to 91.4%, average days-vacant per unit turn has increased from 18 days to 27 days, and the renewal rate has dropped from 61% to 54%. No single cause has been identified. Leadership's current theory is that the market has softened — but comparable properties in the same submarkets are not showing the same deterioration.</p>
+        <p>The operations director has flagged what she calls "invisible churn" — tenants who don't formally complain but also don't renew, and leave no trail of reasons. Maintenance request data shows that several properties have above-average open ticket rates (requests submitted but not resolved within 72 hours), but the connection between maintenance responsiveness and renewal behavior has never been analyzed. Similarly, asking rents across the portfolio have been set based on "what the market will bear" as estimated by individual property managers — there is no systematic approach to pricing that accounts for local market data, unit characteristics, or historical performance by floor, facing, or unit size.</p>
+        <p>The CEO's concern is simple and direct: "If we lose a management contract because a property owner looks at our renewal rates and decides they can do better somewhere else, we've lost not just the management fee — we've lost the relationship, and those owners talk to each other."</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">Financial Situation</div>
+        <p>Northshore's fee revenue is $8.3M annually (8–10% of $104M in rent collected). Each percentage point increase in portfolio occupancy translates to approximately $1.04M in additional rent collected — and $83–104K in additional management fees to Northshore. Each day reduction in average vacancy per turn, across 4,800 units with a 38% turnover rate, saves approximately $128,400 in annual vacancy loss (to property owners) and reduces risk of contract loss. A 3-point improvement in renewal rate (from 54% to 57%) would prevent approximately 144 additional turnovers per year at an average turnover cost of $3,800.</p>
+        <p>Northshore's CEO is willing to invest up to $200K in an analytics-driven operations improvement initiative. She views it partly as an investment in client retention (property owners who see improved metrics don't switch managers) and partly as a competitive differentiator in new contract pitches.</p>
+      </div>
+
+      <div class="client-section">
+        <div class="client-section-title">What Northshore Wants From QSS</div>
+        <div class="signal-list">
+          <div class="signal-item"><div class="signal-icon" style="color:#9b87f5">→</div><div class="signal-text"><strong>Diagnose the renewal rate decline.</strong> Using the 26 months of data in the property management platform, QSS should identify the most likely drivers of declining renewal rates — maintenance responsiveness, pricing variance, unit characteristics, lease timing, or something else — and quantify which properties and which tenant segments are driving the problem.</div></div>
+          <div class="signal-item"><div class="signal-icon" style="color:#9b87f5">→</div><div class="signal-text"><strong>Design a market-based pricing discipline framework.</strong> Northshore needs a systematic approach to setting and adjusting asking rents that is based on public market data and internal performance — not individual property manager intuition. QSS should prototype what a pricing review process would look like, including guardrails that prevent overpricing vacancies in weak micromarkets.</div></div>
+          <div class="signal-item"><div class="signal-icon" style="color:#9b87f5">→</div><div class="signal-text"><strong>Model the NOI impact of operations improvements.</strong> The CEO needs to make a $200K investment decision. QSS should model the impact of a combined occupancy, renewal, and vacancy-day improvement initiative — with realistic assumptions about what 12–24 months of focused operations work could achieve — and calculate the return to both Northshore and the property owners they serve.</div></div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">Key questions your team must address</div>
+        <p>How would you use maintenance request data to test the hypothesis that responsiveness predicts renewals? What does a "market-based pricing framework" look like for a property manager — specifically, what data inputs, what decision rules, and what limits? And how do you model the financial impact of operational improvements for both Northshore (management fee revenue) and the property owners (NOI) simultaneously?</p>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const clientPages = ['eden','harborview','greenloop','apex','northshore'];
+
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    const page = document.getElementById('page-' + pageId);
+    if (page) {
+      page.classList.add('active');
+      page.scrollIntoView ? null : null;
+      document.getElementById('main').scrollTop = 0;
+    }
+
+    // Highlight correct nav item
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const fn = item.getAttribute('onclick') || '';
+      if (fn.includes("'" + pageId + "'")) item.classList.add('active');
+    });
+
+    // Scroll main to top
+    window.scrollTo(0, 0);
+  }
+
+  function showClient(clientId) {
+    showPage('client-' + clientId);
+  }
+
+  // Init
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const fn = item.getAttribute('onclick') || '';
+    if (fn.includes("'overview'")) item.classList.add('active');
+  });
+</script>
+
+  <!-- ══════════════════════ EXAMPLE PAGE ══════════════════════ -->
+  <div class="page" id="page-example">
+    <div class="hero" style="background:linear-gradient(135deg,#0e1117,#121018);">
+      <div class="hero-tag">Reference · Not One of Your Options</div>
+      <h1>Example: <em>Fresh Route</em></h1>
+      <p class="hero-desc">This is a fully worked example of all four phases for a client your team cannot choose. Read it to understand the depth, format, and thinking expected — then apply the same approach to your own client.</p>
+    </div>
+
+    <div style="background:rgba(232,180,90,0.06);border-bottom:1px solid rgba(232,180,90,0.18);padding:16px 56px;">
+      <p style="font-size:13px;color:var(--muted);max-width:800px;">
+        <span style="color:var(--accent);font-weight:600;">How to use this: </span>
+        Notice how each phase uses specific class concepts (Key Activities, cost structure, validation steps, etc.) and connects them directly to the client's situation. That's the standard. Generic answers — "QSS will do research and analysis" — will not meet it.
+      </p>
+    </div>
+
+    <div class="client-content" style="max-width:900px;">
+
+      <!-- Client snapshot -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:36px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);">Client snapshot — Fresh Route Grocery Delivery</div>
+        <div class="fact-grid" style="margin-bottom:20px;">
+          <div class="fact-box"><div class="fact-value" style="color:var(--accent)">800</div><div class="fact-label">Active subscribers (1 city)</div></div>
+          <div class="fact-box"><div class="fact-value" style="color:var(--accent)">$34</div><div class="fact-label">Avg monthly revenue per subscriber</div></div>
+          <div class="fact-box"><div class="fact-value" style="color:var(--accent)">2 cities</div><div class="fact-label">Expansion targets being evaluated</div></div>
+        </div>
+        <p style="font-size:14px;color:var(--muted);line-height:1.8;">Fresh Route is a three-year-old grocery delivery service that serves senior communities — specifically, residents of independent-living facilities and nearby neighborhoods who have difficulty getting to stores. Their model: subscribers pay $18/month plus an 8% service fee on each order. A rotating team of 14 part-time drivers handles same-day delivery from two partnered grocery chains. The business works in Columbus, OH. The founders want to expand to two additional cities (Cleveland and Cincinnati) but have no data on whether the same model will work, no documented operations, and no clear picture of what expansion will actually cost.</p>
+      </div>
+
+      <!-- PHASE 1 EXAMPLE -->
+      <div style="margin-bottom:32px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+          <span style="width:20px;height:20px;background:rgba(62,207,176,0.15);border:1px solid rgba(62,207,176,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--teal);font-weight:700;">1</span>
+          Phase 1 · Infrastructure, Logistics & Business Model Canvas
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:var(--radius);padding:24px 28px;">
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Key Activities (Business Model Canvas)</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.8;">Fresh Route's key activities in a new city would be: <em>driver recruitment and onboarding</em> (ongoing, variable to demand), <em>grocery partner negotiation</em> (one-time but critical), <em>order processing and routing</em> (daily), <em>subscriber acquisition and marketing</em> (ongoing), and <em>customer service and issue resolution</em> (daily). QSS's key activities for this engagement would be: market viability analysis, operations documentation, cost modeling, and launch readiness assessment.</div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Key Resources</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div style="font-size:11px;color:var(--teal);font-weight:600;margin-bottom:4px;">Physical</div>
+                <div style="font-size:12px;color:var(--muted);">Delivery vehicles (driver-owned), insulated bags, mobile devices for order management, a local dispatch hub or staging area in each new city</div>
+              </div>
+              <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div style="font-size:11px;color:var(--teal);font-weight:600;margin-bottom:4px;">Intellectual</div>
+                <div style="font-size:12px;color:var(--muted);">Order management app, grocery partner pricing agreements, subscriber data and behavior history, Columbus operational playbook (currently undocumented — this is a gap)</div>
+              </div>
+              <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div style="font-size:11px;color:var(--teal);font-weight:600;margin-bottom:4px;">Human</div>
+                <div style="font-size:12px;color:var(--muted);">14 part-time drivers (Columbus), 1 ops manager, 1 customer service rep. New cities would each need 8–12 drivers, 1 city manager before launch</div>
+              </div>
+              <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div style="font-size:11px;color:var(--teal);font-weight:600;margin-bottom:4px;">Financial</div>
+                <div style="font-size:12px;color:var(--muted);">~$85K estimated launch capital per new market (driver signing bonuses, local marketing, hub setup, 3 months of fixed costs before subscriber revenue covers them)</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Key Partnerships</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.8;">Local grocery chain partners are the single most critical partnership — without a signed agreement, Fresh Route cannot operate. In Cleveland and Cincinnati, no such agreements exist yet. Additional partnerships needed: a last-mile routing software vendor (currently using a basic tool that won't scale), senior living community referral programs, and potentially a regional food bank for surplus handling.</div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">7Rs of Logistics — Where the Chain is Breaking</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.8;">Fresh Route scores well on Right Product (seniors get what they ordered) and Right Customer (targeting is clear), but has problems at Right Quantity (orders sometimes arrive short due to grocery stockouts, with no protocol for handling substitutions), Right Time (same-day windows are missed ~11% of deliveries in Columbus during peak months), and Right Place (routing software causes inefficiencies when two drivers serve overlapping zones). These are the operational failures that would be amplified in two new cities if not addressed before expansion.</div>
+          </div>
+
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Execution Failure Points</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="padding:12px 14px;background:rgba(240,112,96,0.05);border-left:2px solid var(--coral);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Failure point 1 — No documented operations playbook.</strong> Fresh Route's Columbus model runs on informal knowledge held by two founders. If QSS attempts to replicate it in Cleveland without documenting it first, the new city will make the same early mistakes. Mitigation: QSS's first deliverable is a 2-week operations documentation sprint before any expansion planning begins.</div>
+              <div style="padding:12px 14px;background:rgba(240,112,96,0.05);border-left:2px solid var(--coral);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Failure point 2 — Grocery partner not secured before launch commitment.</strong> If Fresh Route commits to a launch date before signing a local grocery partner, they will have acquired subscribers they cannot serve. Mitigation: QSS recommends a hard gate — no launch marketing until at least one grocery agreement is signed in each new city.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 2 EXAMPLE -->
+      <div style="margin-bottom:32px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+          <span style="width:20px;height:20px;background:rgba(155,135,245,0.15);border:1px solid rgba(155,135,245,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--purple);font-weight:700;">2</span>
+          Phase 2 · Validation — Steps & Assumptions
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:var(--radius);padding:24px 28px;">
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Written Assumptions (test the most influential ones first)</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="padding:10px 14px;background:rgba(155,135,245,0.05);border-radius:var(--radius-sm);border:1px solid rgba(155,135,245,0.12);font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Assumption 1 (most influential):</strong> We assume that seniors in Cleveland and Cincinnati face the same grocery access problem as seniors in Columbus. If this is wrong — if they have other solutions (family support, shuttle services) — the whole expansion thesis fails. Test first.</div>
+              <div style="padding:10px 14px;background:rgba(155,135,245,0.05);border-radius:var(--radius-sm);border:1px solid rgba(155,135,245,0.12);font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Assumption 2:</strong> We assume subscribers in new markets will pay $18/month + 8% fee. This might be wrong — income levels in Cleveland's senior population are lower than Columbus. Price sensitivity may require a different structure.</div>
+              <div style="padding:10px 14px;background:rgba(155,135,245,0.05);border-radius:var(--radius-sm);border:1px solid rgba(155,135,245,0.12);font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Assumption 3:</strong> We assume the Columbus operations model (driver counts, delivery windows, routing zones) is directly replicable. This may be wrong if city geography differs significantly.</div>
+              <div style="padding:10px 14px;background:rgba(155,135,245,0.05);border-radius:var(--radius-sm);border:1px solid rgba(155,135,245,0.12);font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Assumption 4:</strong> We assume local grocery chains in new markets will partner on similar pricing terms. A less favorable wholesale agreement would make unit economics unworkable.</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Draft Prototype — New Market Onboarding Dashboard</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:10px;">The prototype QSS would build and test is a simple "new market readiness dashboard" — a one-page visual that a city manager would use to track the 12 prerequisites before a market launch (grocery partner signed, drivers recruited, routing zones mapped, etc.). It would be built first as a paper checklist, shown to the Columbus ops manager to confirm it captures the real launch sequence, then converted into a simple shared Google Sheet before becoming a tool in any launch software.</div>
+            <div style="font-size:12px;color:var(--muted);padding:12px 16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid var(--border);font-style:italic;">What success looks like for this prototype: the Columbus ops manager reviews the checklist and says "yes, if we'd had this before our own launch, we would have avoided at least 3 of our early problems." That's the validation threshold.</div>
+          </div>
+
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Pivot Logic</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.8;">If Assumption 1 fails (seniors have other solutions and don't see the problem), the pivot is not to abandon grocery delivery but to target a different customer segment — not senior living facilities, but working adults in food deserts. If Assumption 2 fails (price is too high), the pivot is a lower-cost basic tier ($12/month, smaller delivery window, 3 orders/month cap) tested in one neighborhood before committing to a full market launch.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 3 EXAMPLE -->
+      <div style="margin-bottom:32px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+          <span style="width:20px;height:20px;background:rgba(232,180,90,0.15);border:1px solid rgba(232,180,90,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--accent);font-weight:700;">3</span>
+          Phase 3 · Validation Methods & Data Collection
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius);padding:24px 28px;">
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Primary Forms of Validation Selected</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+              <div style="padding:12px;background:rgba(232,180,90,0.05);border-radius:var(--radius-sm);border:1px solid rgba(232,180,90,0.15);">
+                <div style="font-size:11px;color:var(--accent);font-weight:600;margin-bottom:4px;">Talking to customers directly ✓</div>
+                <div style="font-size:12px;color:var(--muted);">20 in-person interviews at two senior living facilities in Cleveland. Goal: test Assumption 1. Are they experiencing the problem? How are they currently solving it?</div>
+              </div>
+              <div style="padding:12px;background:rgba(232,180,90,0.05);border-radius:var(--radius-sm);border:1px solid rgba(232,180,90,0.15);">
+                <div style="font-size:11px;color:var(--accent);font-weight:600;margin-bottom:4px;">Talking to experts ✓</div>
+                <div style="font-size:12px;color:var(--muted);">3 interviews with directors of senior services departments in Cleveland and Cincinnati. They know their populations' needs better than anyone and can flag whether similar services have failed before.</div>
+              </div>
+              <div style="padding:12px;background:rgba(232,180,90,0.05);border-radius:var(--radius-sm);border:1px solid rgba(232,180,90,0.15);">
+                <div style="font-size:11px;color:var(--accent);font-weight:600;margin-bottom:4px;">Surveying ✓</div>
+                <div style="font-size:12px;color:var(--muted);">40-person survey distributed through senior centers. Used to test price sensitivity and baseline behavior at scale, after interviews shape the questions.</div>
+              </div>
+              <div style="padding:12px;background:rgba(232,180,90,0.05);border-radius:var(--radius-sm);border:1px solid rgba(232,180,90,0.15);">
+                <div style="font-size:11px;color:var(--accent);font-weight:600;margin-bottom:4px;">Research ✓</div>
+                <div style="font-size:12px;color:var(--muted);">Census data on senior population size, income distribution, and car ownership rates in Cleveland and Cincinnati ZIP codes. Used to estimate market size before any customer contact.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Survey Design — Question Styles Used & Why</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="font-size:12px;color:var(--muted);padding:10px 14px;border-left:2px solid var(--accent);background:rgba(255,255,255,0.02);border-radius:0 var(--radius-sm) var(--radius-sm) 0;line-height:1.6;"><strong style="color:var(--text);">Likert scale (1–5) for price sensitivity:</strong> "How important is it to you that grocery delivery costs less than $20/month?" — Likert captures attitude without forcing a yes/no. We need to understand <em>degree</em> of price sensitivity, not just presence of it. Respondents who score 4–5 are our target. Below 3.5 average tells us the $18 price point is a barrier.</div>
+              <div style="font-size:12px;color:var(--muted);padding:10px 14px;border-left:2px solid var(--accent);background:rgba(255,255,255,0.02);border-radius:0 var(--radius-sm) var(--radius-sm) 0;line-height:1.6;"><strong style="color:var(--text);">Open-ended for current behavior:</strong> "How do you currently get your groceries?" — We chose open-ended here because we don't want to constrain the answer. If a significant number say "my daughter comes every Saturday," that's a signal we didn't anticipate and could change our strategy entirely. Yes/No would miss it.</div>
+              <div style="font-size:12px;color:var(--muted);padding:10px 14px;border-left:2px solid var(--accent);background:rgba(255,255,255,0.02);border-radius:0 var(--radius-sm) var(--radius-sm) 0;line-height:1.6;"><strong style="color:var(--text);">Demographic questions for segmentation:</strong> Age bracket, living situation (independent living facility vs. private home), and income range. This lets us identify which sub-segments are most likely to subscribe — and which ones may need a different pricing tier.</div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Data → Decision Flow</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.9;padding:14px 16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid var(--border);">
+              <strong style="color:var(--text);">Step 1:</strong> Census research → market size estimate → if &lt;3,000 seniors with limited mobility in target ZIP codes, do not proceed to customer interviews (market too small)<br>
+              <strong style="color:var(--text);">Step 2:</strong> Customer interviews → if &gt;70% describe grocery access as a significant difficulty, proceed to survey. If &lt;50%, flag market viability risk and present to QSS leadership before continuing.<br>
+              <strong style="color:var(--text);">Step 3:</strong> Survey Likert price data → if average score on price sensitivity is ≥3.5, current $18/month model is viable. If &lt;3.5, prototype the lower-cost tier instead.<br>
+              <strong style="color:var(--text);">Step 4:</strong> Expert interviews → if senior services directors flag a competing service already operating in the market, assess whether differentiation is strong enough to proceed.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 4 EXAMPLE -->
+      <div style="margin-bottom:32px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--coral);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+          <span style="width:20px;height:20px;background:rgba(240,112,96,0.15);border:1px solid rgba(240,112,96,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--coral);font-weight:700;">4</span>
+          Phase 4 · Cost Structure & Financial Reasoning
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--coral);border-radius:var(--radius);padding:24px 28px;">
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Cost Structure Classification (per new market)</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div style="padding:14px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div style="font-size:11px;color:var(--coral);font-weight:600;margin-bottom:8px;">Fixed Costs — stay the same regardless of orders</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.8;">City manager salary: $4,000/month<br>App hosting + routing software: $400/month<br>Dispatch hub rental: $1,200/month<br>Insurance (base): $800/month<br><strong style="color:var(--text);">Total fixed: ~$6,400/month</strong></div>
+              </div>
+              <div style="padding:14px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div style="font-size:11px;color:var(--coral);font-weight:600;margin-bottom:8px;">Variable Costs — change with delivery volume</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.8;">Driver pay per delivery: $4.20<br>Packaging (insulated bags, etc.): $0.60<br>Fuel reimbursement: $1.40<br>Customer service per contact: $1.80 avg<br><strong style="color:var(--text);">Total variable: ~$6.50/delivery</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Cost-Driven vs. Value-Driven Diagnosis</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.8;">Fresh Route is fundamentally <strong style="color:var(--text);">cost-driven</strong> — their competitive advantage is affordability and reliability for a price-sensitive customer segment (fixed-income seniors). A value-driven model (premium packaging, concierge service, expanded product range) would miss the market entirely. This means QSS's recommendation must prioritize scale efficiencies: the business only becomes profitable when fixed costs are spread across enough subscribers. This is why market size matters so much in Phase 3.</div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Basic Cost-Benefit Analysis (base case, per new market)</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.9;padding:14px 16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid var(--border);">
+              <strong style="color:var(--text);">Assumption:</strong> Average subscriber places 2.4 orders/month at $85 avg order value.<br>
+              <strong style="color:var(--text);">Revenue per subscriber/month:</strong> $18 subscription + (8% × $85 × 2.4) = $18 + $16.32 = <strong style="color:var(--text);">$34.32</strong><br>
+              <strong style="color:var(--text);">Variable cost per subscriber/month:</strong> 2.4 deliveries × $6.50 = $15.60<br>
+              <strong style="color:var(--text);">Contribution margin per subscriber:</strong> $34.32 − $15.60 = <strong style="color:var(--text);">$18.72/month</strong><br>
+              <strong style="color:var(--text);">Fixed cost coverage:</strong> $6,400 ÷ $18.72 = <strong style="color:var(--text);">342 subscribers needed to break even</strong><br>
+              <strong style="color:var(--text);">Launch capital required:</strong> $85,000 (covers fixed costs through month 4 while building subscriber base)
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Economies of Scale</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.8;">Fixed costs don't grow proportionally with subscribers — a city manager can handle 200 or 800 subscribers at the same salary. Above 500 subscribers, the routing software subscription unlocks a bulk-route optimization feature that reduces average driver time per delivery by ~18%, dropping the variable cost from $6.50 to approximately $5.35 per delivery. This is the economies-of-scale inflection point. At 700 subscribers, this cost drop adds approximately $1,015/month in contribution margin — enough to fund the second city manager hire at ~60% of breakeven.</div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">Three-Case Sensitivity</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+              <div style="padding:14px;background:rgba(94,196,122,0.05);border:1px solid rgba(94,196,122,0.2);border-radius:var(--radius-sm);">
+                <div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:8px;">Best case</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.8;">500 subscribers by month 6<br>Grocery partner signed in week 3<br>Driver pool of 11 before launch<br><strong style="color:var(--text);">Monthly profit: +$2,960</strong><br>Payback: month 7</div>
+              </div>
+              <div style="padding:14px;background:rgba(232,180,90,0.05);border:1px solid rgba(232,180,90,0.2);border-radius:var(--radius-sm);">
+                <div style="font-size:11px;color:var(--accent);font-weight:600;margin-bottom:8px;">Base case</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.8;">342 subscribers by month 6<br>Grocery partner signed in week 8<br>Driver pool of 8 at launch<br><strong style="color:var(--text);">Monthly profit: $0 (breakeven)</strong><br>Payback: month 11</div>
+              </div>
+              <div style="padding:14px;background:rgba(240,112,96,0.05);border:1px solid rgba(240,112,96,0.2);border-radius:var(--radius-sm);">
+                <div style="font-size:11px;color:var(--coral);font-weight:600;margin-bottom:8px;">Worst case</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.8;">200 subscribers by month 6<br>Grocery partner delays to month 4<br>High driver turnover (avg 3 replacements)<br><strong style="color:var(--text);">Monthly loss: −$2,656</strong><br>Payback: never without pivot</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:20px 24px;background:rgba(232,180,90,0.06);border:1px solid rgba(232,180,90,0.2);border-radius:var(--radius);">
+            <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Recommendation</div>
+            <div style="font-size:15px;font-family:'Playfair Display',serif;color:var(--text);font-weight:600;margin-bottom:10px;">Proceed With Conditions</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:12px;"><strong style="color:var(--text);">Financial reason:</strong> The base case requires 342 subscribers to break even by month 6, with a payback period of approximately 11 months on an $85K launch investment. That is a realistic but tight target. The risk is concentrated in two gates that QSS can verify before Fresh Route spends anything: (1) does the senior population in the target market have the problem, and (2) can a grocery partner be signed within the first 8 weeks? If both gates pass validation, the investment is justified. If either fails, the market should not be entered.</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;line-height:1.5;"><span style="color:var(--accent);font-size:11px;margin-top:2px;">Condition 1</span> Complete Phase 3 validation before committing any launch capital — specifically, the customer interviews and market size check.</div>
+              <div style="font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;line-height:1.5;"><span style="color:var(--accent);font-size:11px;margin-top:2px;">Condition 2</span> Launch Cleveland only first. Do not attempt both cities simultaneously — fixed costs would double before revenue has proven the model works in a new market.</div>
+              <div style="font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;line-height:1.5;"><span style="color:var(--accent);font-size:11px;margin-top:2px;">Condition 3</span> Document the Columbus operations model before doing anything else. Without this, QSS has nothing to replicate.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:20px 24px;margin-top:8px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">What to take from this example</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;display:flex;gap:8px;"><span style="color:var(--accent);flex-shrink:0;">→</span>Every section uses a specific class concept by name (Key Activities, 7Rs, Likert scale, fixed vs. variable costs). Not just the concept in general — applied to this specific client.</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;display:flex;gap:8px;"><span style="color:var(--accent);flex-shrink:0;">→</span>Numbers are never dropped without an assumption. "$85K launch capital" comes from the fixed cost model, not from nowhere.</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;display:flex;gap:8px;"><span style="color:var(--accent);flex-shrink:0;">→</span>The recommendation is specific enough to repeat without the slides: "342 subscribers to break even, 11-month payback, two validation gates before spending anything."</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;display:flex;gap:8px;"><span style="color:var(--accent);flex-shrink:0;">→</span>Phases connect to each other — the failure points in Phase 1 (no grocery partner) become a gate in Phase 4. The assumptions in Phase 2 become the survey questions in Phase 3. Everything builds.</div>
+        </div>
+      </div>
+
+      <!-- ── DELIVERABLE EXAMPLES HEADER ── -->
+      <div style="margin-top:48px;margin-bottom:24px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">Example Deliverables — Fresh Route</div>
+        <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:var(--text);letter-spacing:-0.5px;margin-bottom:8px;">What the three deliverables look like</div>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;max-width:700px;">Below are example versions of all three required deliverables for Fresh Route. Notice how the one-pager distills everything into a single visual, the deck builds the argument slide by slide, and the memo shows the math that supports it all.</p>
+      </div>
+
+      <!-- ══════════ DELIVERABLE 1: ONE-PAGER ══════════ -->
+      <div style="margin-bottom:36px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+          <span style="width:22px;height:22px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text);font-weight:700;flex-shrink:0;">1</span>
+          Deliverable 1 — The One-Pager (Visual Snapshot)
+        </div>
+
+        <!-- ONE-PAGER MOCK -->
+        <div style="background:#1a1f2e;border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;font-family:'Sora',sans-serif;">
+          <!-- Header bar -->
+          <div style="background:#e8b45a;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#0e1117;letter-spacing:-0.5px;">Fresh Route Grocery Delivery</div>
+              <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#3a2e10;margin-top:2px;">QSS Opportunity Snapshot · Internal Use Only</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:10px;color:#3a2e10;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Recommendation</div>
+              <div style="font-size:15px;font-weight:700;color:#0e1117;font-family:'Playfair Display',serif;">Proceed With Conditions</div>
+            </div>
+          </div>
+
+          <div style="padding:20px 24px;">
+            <!-- Top row: 3 columns -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;">
+              <!-- Client & Problem -->
+              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px;">
+                <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#e8b45a;margin-bottom:8px;">The Client & Problem</div>
+                <p style="font-size:11px;color:#a0a098;line-height:1.7;margin:0;">Senior-focused grocery delivery service operating in Columbus, OH. Wants to expand to Cleveland and Cincinnati but has no documented operations, no new grocery partners, and no validated data on whether the model works outside their home market.</p>
+              </div>
+              <!-- Operations Flow -->
+              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px;">
+                <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#3ecfb0;margin-bottom:8px;">QSS Execution Flow</div>
+                <div style="display:flex;flex-direction:column;gap:5px;">
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:#a0a098;"><span style="width:16px;height:16px;background:rgba(62,207,176,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#3ecfb0;font-weight:700;flex-shrink:0;">1</span>Document Columbus ops model</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:#a0a098;"><span style="width:16px;height:16px;background:rgba(62,207,176,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#3ecfb0;font-weight:700;flex-shrink:0;">2</span>Validate Cleveland market need</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:#a0a098;"><span style="width:16px;height:16px;background:rgba(62,207,176,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#3ecfb0;font-weight:700;flex-shrink:0;">3</span>Model unit economics per market</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:#a0a098;"><span style="width:16px;height:16px;background:rgba(62,207,176,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#3ecfb0;font-weight:700;flex-shrink:0;">4</span>Define grocery partner gate</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:#a0a098;"><span style="width:16px;height:16px;background:rgba(62,207,176,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#3ecfb0;font-weight:700;flex-shrink:0;">5</span>Deliver launch readiness report</div>
+                </div>
+              </div>
+              <!-- Cost/Benefit Snapshot -->
+              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px;">
+                <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#f07060;margin-bottom:8px;">Cost / Benefit Snapshot</div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                  <div style="display:flex;justify-content:space-between;font-size:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:5px;">
+                    <span style="color:#8a8880;">Launch capital needed</span>
+                    <span style="color:#e8e6df;font-weight:500;">$85,000</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:5px;">
+                    <span style="color:#8a8880;">Fixed cost / month</span>
+                    <span style="color:#e8e6df;font-weight:500;">$6,400</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:5px;">
+                    <span style="color:#8a8880;">Breakeven subscribers</span>
+                    <span style="color:#e8e6df;font-weight:500;">342</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:5px;">
+                    <span style="color:#8a8880;">Revenue / subscriber / mo.</span>
+                    <span style="color:#e8e6df;font-weight:500;">$34.32</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;">
+                    <span style="color:#8a8880;">Est. payback period</span>
+                    <span style="color:#3ecfb0;font-weight:600;">~11 months</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom row: 3-case + recommendation reason -->
+            <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;">
+              <!-- 3-case sensitivity -->
+              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px;">
+                <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#9b87f5;margin-bottom:10px;">3-Case Sensitivity</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+                  <div style="text-align:center;padding:8px;background:rgba(94,196,122,0.07);border:1px solid rgba(94,196,122,0.18);border-radius:6px;">
+                    <div style="font-size:9px;color:#5ec47a;font-weight:600;margin-bottom:4px;">BEST</div>
+                    <div style="font-size:11px;color:#e8e6df;font-weight:500;">500 subs × mo.6</div>
+                    <div style="font-size:10px;color:#5ec47a;margin-top:2px;">+$2,960/mo</div>
+                    <div style="font-size:9px;color:#8a8880;margin-top:1px;">Payback: mo. 7</div>
+                  </div>
+                  <div style="text-align:center;padding:8px;background:rgba(232,180,90,0.07);border:1px solid rgba(232,180,90,0.18);border-radius:6px;">
+                    <div style="font-size:9px;color:#e8b45a;font-weight:600;margin-bottom:4px;">BASE</div>
+                    <div style="font-size:11px;color:#e8e6df;font-weight:500;">342 subs × mo.6</div>
+                    <div style="font-size:10px;color:#e8b45a;margin-top:2px;">Breakeven</div>
+                    <div style="font-size:9px;color:#8a8880;margin-top:1px;">Payback: mo. 11</div>
+                  </div>
+                  <div style="text-align:center;padding:8px;background:rgba(240,112,96,0.07);border:1px solid rgba(240,112,96,0.18);border-radius:6px;">
+                    <div style="font-size:9px;color:#f07060;font-weight:600;margin-bottom:4px;">WORST</div>
+                    <div style="font-size:11px;color:#e8e6df;font-weight:500;">200 subs × mo.6</div>
+                    <div style="font-size:10px;color:#f07060;margin-top:2px;">−$2,656/mo</div>
+                    <div style="font-size:9px;color:#8a8880;margin-top:1px;">Needs pivot</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Recommendation reason -->
+              <div style="background:rgba(232,180,90,0.06);border:1px solid rgba(232,180,90,0.2);border-radius:8px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+                <div>
+                  <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#e8b45a;margin-bottom:8px;">Why Proceed With Conditions</div>
+                  <p style="font-size:10px;color:#a0a098;line-height:1.7;margin:0;">Base case payback of ~11 months on $85K is achievable — but only if two gates pass validation first: (1) seniors in Cleveland have the access problem, and (2) a grocery partner signs within week 8. Neither should be assumed.</p>
+                </div>
+                <div style="margin-top:10px;font-size:9px;color:#e8b45a;font-weight:600;">Launch Cleveland only. Validate first.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;">↑ This is a visual mockup of what the one-pager looks like. Yours should be a designed PDF — infographic layout, not a wall of paragraphs. Every box above corresponds to a required element.</p>
+      </div>
+
+      <!-- ══════════ DELIVERABLE 2: SLIDE DECK ══════════ -->
+      <div style="margin-bottom:36px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+          <span style="width:22px;height:22px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text);font-weight:700;flex-shrink:0;">2</span>
+          Deliverable 2 — The Slide Deck (Full Analysis)
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;">
+
+          <!-- Slide 1 -->
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+            <div style="display:flex;align-items:stretch;">
+              <div style="width:80px;background:rgba(232,180,90,0.1);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;flex-shrink:0;">
+                <div style="font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-align:center;line-height:1.4;">Slide</div>
+                <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--accent);">1</div>
+              </div>
+              <div style="padding:16px 20px;flex:1;">
+                <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;">The Opportunity</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.7;"><strong style="color:var(--text);">Headline:</strong> "Fresh Route has a proven model and a time-sensitive window to expand — if they move without a plan, they'll break what works."<br>
+                <strong style="color:var(--text);">Content:</strong> One sentence on who Fresh Route is. Their current subscriber base and market. The opportunity: two cities, 14M potential senior customers in target ZIPs. The risk: no operations documentation, no grocery partners in new markets, no validated demand data. The stakes: if expansion fails, it threatens the Columbus operation's credibility with potential new investors.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slides 2-3 -->
+          <div style="background:var(--surface);border:1px solid rgba(62,207,176,0.25);border-radius:var(--radius);overflow:hidden;">
+            <div style="display:flex;align-items:stretch;">
+              <div style="width:80px;background:rgba(62,207,176,0.08);border-right:1px solid rgba(62,207,176,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;flex-shrink:0;">
+                <div style="font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);text-align:center;line-height:1.4;">Slides</div>
+                <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--teal);">2–3</div>
+                <div style="font-size:8px;color:var(--teal);opacity:0.7;margin-top:2px;text-align:center;">Phase 1</div>
+              </div>
+              <div style="padding:16px 20px;flex:1;">
+                <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;">Operations & Cost Logic</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+                  <strong style="color:var(--text);">Slide 2 — Business Model Canvas breakdown:</strong> Map Fresh Route's Key Activities (order processing, driver management, grocery partner relationships, subscriber acquisition), Key Resources (routing app, driver pool, grocery agreements, Columbus playbook), and Key Partnerships (grocery chains, senior living referral programs, routing software vendor). Show how each one must be re-established from scratch in a new market — this is why expansion is non-trivial.<br><br>
+                  <strong style="color:var(--text);">Slide 3 — Infrastructure, 7Rs, and failure points:</strong> Apply the 7Rs of Logistics — show exactly where Fresh Route's chain currently breaks (Right Time: 11% late deliveries; Right Quantity: stockout substitution problem). Identify two execution failure points with mitigations: (1) no operations playbook exists → QSS must document Columbus ops before anything else; (2) no grocery partner = no launch → hard gate required before marketing spend.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slides 4-5 -->
+          <div style="background:var(--surface);border:1px solid rgba(155,135,245,0.25);border-radius:var(--radius);overflow:hidden;">
+            <div style="display:flex;align-items:stretch;">
+              <div style="width:80px;background:rgba(155,135,245,0.08);border-right:1px solid rgba(155,135,245,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;flex-shrink:0;">
+                <div style="font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);text-align:center;line-height:1.4;">Slides</div>
+                <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--purple);">4–5</div>
+                <div style="font-size:8px;color:var(--purple);opacity:0.7;margin-top:2px;text-align:center;">Phase 2</div>
+              </div>
+              <div style="padding:16px 20px;flex:1;">
+                <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;">Prototype & Assumption Testing</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+                  <strong style="color:var(--text);">Slide 4 — Written assumptions + prototype:</strong> Present your four key assumptions in the format from class: "We assume [X] is true because [Y]." Show the prototype — the New Market Readiness Dashboard (a 12-checkpoint launch tracker). Describe what it looks like: paper checklist → Google Sheet → eventual tool integration. Explain that it was built to test whether the Columbus ops manager would have used it — because if she wouldn't, no city manager in Cleveland will either.<br><br>
+                  <strong style="color:var(--text);">Slide 5 — Success definition + pivot logic:</strong> Define success clearly: the Columbus ops manager says the checklist would have prevented at least 3 early launch problems. If Assumption 1 fails (no demand in Cleveland), show the pivot: shift target from senior living facilities to food-desert neighborhoods with working adults. If Assumption 2 fails (price too high), prototype a lower-cost $12/month tier. Show the iteration plan: ops manager review in week 1, city manager mock-use in week 2.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slides 6-7 -->
+          <div style="background:var(--surface);border:1px solid rgba(232,180,90,0.25);border-radius:var(--radius);overflow:hidden;">
+            <div style="display:flex;align-items:stretch;">
+              <div style="width:80px;background:rgba(232,180,90,0.08);border-right:1px solid rgba(232,180,90,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;flex-shrink:0;">
+                <div style="font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);text-align:center;line-height:1.4;">Slides</div>
+                <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--accent);">6–7</div>
+                <div style="font-size:8px;color:var(--accent);opacity:0.7;margin-top:2px;text-align:center;">Phase 3</div>
+              </div>
+              <div style="padding:16px 20px;flex:1;">
+                <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;">Validation Plan & Data Strategy</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+                  <strong style="color:var(--text);">Slide 6 — Validation methods + survey design:</strong> Show the four primary forms of validation chosen and why each fits. Highlight the survey design decision: why Likert scale for price sensitivity (we need degree, not yes/no), why open-ended for current grocery behavior (we don't want to constrain the answer — "my daughter comes every Saturday" is a finding we'd miss with multiple choice), and why demographic questions matter (income level in Cleveland's senior population differs from Columbus). Show 3 sample questions with their format and what each one would tell you.
+                  <br><br>
+                  <strong style="color:var(--text);">Slide 7 — Data → decision flow:</strong> Draw the process flow: Census research → interview gate (if &lt;50% confirm the problem, flag to leadership) → survey Likert → pricing decision (if avg &lt;3.5, prototype lower tier) → expert interviews → market entry decision. Each arrow should name the specific threshold that triggers the next step. The slide should make it clear that no money is spent until the data says go.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slides 8-9 -->
+          <div style="background:var(--surface);border:1px solid rgba(240,112,96,0.25);border-radius:var(--radius);overflow:hidden;">
+            <div style="display:flex;align-items:stretch;">
+              <div style="width:80px;background:rgba(240,112,96,0.08);border-right:1px solid rgba(240,112,96,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;flex-shrink:0;">
+                <div style="font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--coral);text-align:center;line-height:1.4;">Slides</div>
+                <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--coral);">8–9</div>
+                <div style="font-size:8px;color:var(--coral);opacity:0.7;margin-top:2px;text-align:center;">Phase 4</div>
+              </div>
+              <div style="padding:16px 20px;flex:1;">
+                <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;">Financial Logic & Recommendation</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+                  <strong style="color:var(--text);">Slide 8 — Cost structure + unit economics:</strong> Show the fixed vs. variable cost split clearly. Fixed: city manager salary, software, hub rental, insurance = $6,400/month (doesn't change whether you have 50 or 500 subscribers). Variable: $6.50 per delivery (driver pay, fuel, packaging — scales directly with order volume). Diagnose Fresh Route as cost-driven, not value-driven — they compete on affordability for a price-sensitive market. Show the economies of scale inflection point: at 500+ subscribers, routing optimization cuts variable cost to ~$5.35 per delivery, adding ~$1,015/month in contribution margin.
+                  <br><br>
+                  <strong style="color:var(--text);">Slide 9 — 3-case sensitivity + recommendation:</strong> Present the three scenarios (already detailed in Phase 4 above) in a clean visual table. State the recommendation clearly: <em>Proceed With Conditions.</em> The headline financial reason: "Base case supports 11-month payback on $85K — but only if two validation gates pass first. No spend before the data comes back." List the three conditions. End the slide with a single sentence that could stand alone: "342 subscribers by month 6 covers our fixed costs — anything above that is profit, anything below requires a pivot."
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 10 -->
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+            <div style="display:flex;align-items:stretch;">
+              <div style="width:80px;background:rgba(255,255,255,0.03);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;flex-shrink:0;">
+                <div style="font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-align:center;line-height:1.4;">Slide</div>
+                <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text);">10</div>
+              </div>
+              <div style="padding:16px 20px;flex:1;">
+                <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;">Risks & Open Questions</div>
+                <div style="font-size:12px;color:var(--muted);line-height:1.7;"><strong style="color:var(--text);">Risk 1:</strong> Grocery partner negotiation takes longer than 8 weeks. If this happens, we recommend delaying the launch rather than marketing without a fulfilled delivery pipeline — broken first impressions in senior communities travel fast by word-of-mouth.<br>
+                <strong style="color:var(--text);">Risk 2:</strong> Driver retention is lower in Cleveland than in Columbus. Fresh Route's Columbus team is stable after 3 years — but new-market drivers won't have that loyalty. A 30%+ monthly driver churn rate would raise variable costs and hurt delivery reliability before subscriber momentum builds.<br>
+                <strong style="color:var(--text);">Open question:</strong> Should Fresh Route negotiate a shared back-office with a healthcare transportation provider in each new market, since they serve the same senior population? This could cut fixed costs by ~$1,200/month and lower the breakeven subscriber count from 342 to ~278.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══════════ DELIVERABLE 3: SUPPORTING MEMO ══════════ -->
+      <div style="margin-bottom:36px;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+          <span style="width:22px;height:22px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text);font-weight:700;flex-shrink:0;">3</span>
+          Deliverable 3 — The Supporting Memo (Show Your Work)
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+          <!-- Memo header -->
+          <div style="padding:18px 24px 14px;border-bottom:1px solid var(--border);">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:12px;margin-bottom:10px;">
+              <div><span style="color:var(--muted);">To:</span> <span style="color:var(--text);">QSS Leadership</span></div>
+              <div><span style="color:var(--muted);">From:</span> <span style="color:var(--text);">QSS Analytics Team — Group [X]</span></div>
+              <div><span style="color:var(--muted);">Re:</span> <span style="color:var(--text);">Fresh Route — Expansion Feasibility, Supporting Analysis</span></div>
+              <div><span style="color:var(--muted);">Date:</span> <span style="color:var(--text);">[Submission Date]</span></div>
+            </div>
+            <div style="font-size:11px;color:var(--muted);font-style:italic;">This memo supports the Fresh Route slide deck. It contains the financial model, full cost assumptions, sensitivity table, and citations that did not fit the deck format.</div>
+          </div>
+
+          <div style="padding:20px 24px;display:flex;flex-direction:column;gap:20px;">
+
+            <!-- Section 1: Financial model -->
+            <div>
+              <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Section 1 — Full Financial Model with Labeled Assumptions</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.9;">
+                <strong style="color:var(--text);">Revenue model (per subscriber, per month)</strong><br>
+                Assumption A: Average subscriber places 2.4 orders/month. <em style="color:#8a8880;">Source: Fresh Route Columbus operational data, provided by client.</em><br>
+                Assumption B: Average order value = $85. <em style="color:#8a8880;">Source: Columbus transaction records; assumed consistent across new markets pending validation.</em><br>
+                Subscription fee: $18.00<br>
+                Service fee: 8% × $85 × 2.4 = $16.32<br>
+                <strong style="color:var(--text);">Total revenue per subscriber per month: $34.32</strong>
+              </div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.9;margin-top:10px;">
+                <strong style="color:var(--text);">Variable cost per subscriber, per month</strong><br>
+                Assumption C: Each subscriber generates 2.4 deliveries/month (same as order count).<br>
+                Driver pay: $4.20 × 2.4 = $10.08<br>
+                Packaging: $0.60 × 2.4 = $1.44<br>
+                Fuel reimbursement: $1.40 × 2.4 = $3.36<br>
+                Customer service average: $0.72<br>
+                <strong style="color:var(--text);">Total variable cost per subscriber per month: $15.60</strong>
+              </div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.9;margin-top:10px;">
+                <strong style="color:var(--text);">Contribution margin per subscriber: $34.32 − $15.60 = $18.72/month</strong><br>
+                Fixed costs: $6,400/month (see cost structure slide)<br>
+                Breakeven: $6,400 ÷ $18.72 = <strong style="color:var(--text);">342 subscribers</strong><br>
+                Launch capital required: $85,000<br>
+                Assumption D: $85,000 covers fixed costs for 4 months while the subscriber base grows to breakeven. ($6,400 × 4 = $25,600; remainder covers driver signing bonuses, local marketing, and hub setup deposit.)
+              </div>
+            </div>
+
+            <!-- Section 2: Sensitivity table -->
+            <div>
+              <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Section 2 — Three-Case Sensitivity Table</div>
+              <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                  <thead>
+                    <tr style="border-bottom:1px solid var(--border);">
+                      <th style="text-align:left;padding:8px 10px;color:var(--muted);font-weight:500;">Variable</th>
+                      <th style="text-align:center;padding:8px 10px;color:#5ec47a;font-weight:500;">Best Case</th>
+                      <th style="text-align:center;padding:8px 10px;color:var(--accent);font-weight:500;">Base Case</th>
+                      <th style="text-align:center;padding:8px 10px;color:#f07060;font-weight:500;">Worst Case</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                      <td style="padding:7px 10px;color:var(--muted);">Subscribers by month 6</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--text);">500</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--text);">342</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--text);">200</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                      <td style="padding:7px 10px;color:var(--muted);">Grocery partner signed</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--text);">Week 3</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--text);">Week 8</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--text);">Month 4</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                      <td style="padding:7px 10px;color:var(--muted);">Variable cost / delivery</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--text);">$5.35 (scale benefit)</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--text);">$6.50</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--text);">$7.40 (high turnover)</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                      <td style="padding:7px 10px;color:var(--muted);">Monthly profit/(loss) at mo. 6</td>
+                      <td style="padding:7px 10px;text-align:center;color:#5ec47a;font-weight:500;">+$2,960</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--accent);font-weight:500;">$0 (breakeven)</td>
+                      <td style="padding:7px 10px;text-align:center;color:#f07060;font-weight:500;">−$2,656</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:7px 10px;color:var(--muted);">Payback period</td>
+                      <td style="padding:7px 10px;text-align:center;color:#5ec47a;font-weight:500;">Month 7</td>
+                      <td style="padding:7px 10px;text-align:center;color:var(--accent);font-weight:500;">Month 11</td>
+                      <td style="padding:7px 10px;text-align:center;color:#f07060;font-weight:500;">No payback (pivot required)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6;">The worst-case scenario is driven primarily by a delayed grocery partner (which delays subscriber acquisition) combined with high driver turnover (which raises variable costs). Neither of these are unlikely — they are the two risks explicitly flagged in the deck. The difference between base and worst case is not about market size; it is about operational execution in the first 8 weeks.</p>
+            </div>
+
+            <!-- Section 3: Sources -->
+            <div>
+              <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Section 3 — Sources</div>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <div style="font-size:11px;color:var(--muted);line-height:1.6;padding-left:12px;border-left:1px solid var(--border2);"><strong style="color:var(--text);">Source 1 (Financial/Industry):</strong> AARP Public Policy Institute. (2023). <em>Older Adults and Grocery Access: Challenges and Solutions.</em> Used to support market size estimates for senior grocery access barriers in mid-sized U.S. cities.</div>
+                <div style="font-size:11px;color:var(--muted);line-height:1.6;padding-left:12px;border-left:1px solid var(--border2);"><strong style="color:var(--text);">Source 2 (Operations):</strong> U.S. Census Bureau. (2023). <em>American Community Survey: Age and Disability Characteristics by ZIP Code.</em> Used to estimate the number of seniors with mobility limitations in Cleveland and Cincinnati target ZIP codes.</div>
+                <div style="font-size:11px;color:var(--muted);line-height:1.6;padding-left:12px;border-left:1px solid var(--border2);"><strong style="color:var(--text);">Source 3 (Business Model):</strong> Osterwalder, A. &amp; Pigneur, Y. (2010). <em>Business Model Generation.</em> Used to structure the Key Activities, Key Resources, and Key Partnerships framework applied in Phase 1 of this analysis.</div>
+                <p style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px;">Note: At least one of your three sources must be a financial or industry source — like Source 1 above. Google, Wikipedia, and the client's own website do not count as credible citations.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;">↑ Your memo should follow this exact structure: financial model with labeled assumptions, sensitivity table, and cited sources. 1–2 pages only. This is not a summary of your slides — it's the math and evidence behind them.</p>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
